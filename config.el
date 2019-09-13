@@ -22,11 +22,16 @@
     ;;(cfw:ical-create-source "gcal" "https://..../basic.ics" "IndianRed") ; google calendar ICS
    )))
 
-(load-file "~/.doom.d/hydras.el")
+(after! hydra
+  ;; load my hydras
+  (load-file "~/.doom.d/hydras.el")
 
-;; set hydras to be posframes
-(setq hydra-hint-display-type 'posframe)
+  ;; set hydras to be posframes
+  (setq hydra-hint-display-type 'posframe)
+  )
 
-;; create leader key
-(define-key objed-map (kbd "SPC") 'hydra-hail/body)
-(define-key objed-map (kbd "M-x") 'counsel-M-x)
+(after! objed
+  ;; create leader key
+  (define-key objed-map (kbd "SPC") 'hydra-hail/body)
+  (define-key objed-map (kbd "M-x") 'counsel-M-x)
+  )
