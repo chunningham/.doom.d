@@ -14,7 +14,7 @@ _d_esk | _l_ookup
   ("f" cc/hydra-files/body)
   ("b" cc/hydra-buffers/body)
   ("p" cc/hydra-projects/body)
-  ("d" cc/hydra-worspaces/body)
+  ("d" cc/hydra-workspaces/body)
   ("a" cc/hydra-applications/body)
   ("s" cc/hydra-session/body)
   ("g" cc/hydra-git/body)
@@ -22,6 +22,7 @@ _d_esk | _l_ookup
   ("l" cc/hydra-lookup/body)
   ("i" cc/hydra-ide/body)
   ("w" cc/hydra-window/body)
+  ("." nil)
   ("SPC" nil)
   )
 
@@ -43,8 +44,8 @@ _c_onfig | _d_elete
   ("r" recentf-open-files)
   ("e" dired)
   ("d" doom/delete-this-file)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-buffers (:color blue
@@ -65,8 +66,8 @@ _[__]_: prev/next
   ("s" doom/open-project-scratch-buffer)
   ("o" doom/kill-other-buffers)
   ("l" projectile-previous-project-buffer)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-projects (:color blue
@@ -87,8 +88,8 @@ _i_ibuffer | _t_ree
   ("k" projectile-kill-buffers)
   ("i" projectile-ibuffer)
   ("t" treemacs)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-workspaces (:color blue
@@ -109,8 +110,8 @@ _[__]_: prev/next
   ("k" projectile-kill-buffers)
   ("[" +workspace/switch-left :color red)
   ("]" +workspace/switch-right :color red)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-applications (:color blue
@@ -128,8 +129,8 @@ _s_lack    | _a_genda
   ("m" =mu4e)
   ("i" irc)
   ("a" org-agenda)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-session (:color blue
@@ -151,8 +152,8 @@ _s_ave    | _S_ave to file
   ("L" doom/load-session)
   ("s" doom/quicksave-session)
   ("S" doom/save-session)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-org (:color blue
@@ -167,8 +168,8 @@ _c_apture | _s_earch
   ("n" +default/browse-notes)
   ("c" org-capture)
   ("s" +default/org-notes-search)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-lookup (:color blue
@@ -177,7 +178,7 @@ _c_apture | _s_earch
 Lookup
 ^-^----|-^-^--
 "
-  ("SPC" nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-yasnippet (:color blue :hint nil)
@@ -201,8 +202,8 @@ YASnippets
   ("g" yas/global-mode)
   ("m" yas/minor-mode)
   ("a" yas-reload-all)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
  (defhydra cc/hydra-window (:hint nil)
@@ -214,7 +215,7 @@ _j_ ↓        	_x_ horizontal	_f_ind files	_w_ X↓
 _k_ ↑        	_z_ undo      	_a_ce 1		_e_ X↑
 _l_ →        	_Z_ reset      	_s_wap		_r_ X→
 _F_ollow		_D_lt Other   	_S_ave		max_i_mize
-_SPC_ cancel	_o_nly this   	_d_elete
+_._ cancel	_o_nly this   	_d_elete
 "
    ("h" windmove-left )
    ("j" windmove-down )
@@ -263,25 +264,23 @@ _SPC_ cancel	_o_nly this   	_d_elete
           (setq this-command 'winner-undo))
    )
    ("Z" winner-redo)
-   ("SPC" nil)
-   ("." hydra-hail/body :color blue)
+   ("SPC" hydra-hail/body :color blue)
+   ("." nil)
    )
 
 (defhydra cc/hydra-git-gutter (:body-pre (git-gutter-mode 1)
                             :hint nil)
   "
 Git gutter:
-  _j_: next hunk        _s_tage hunk     _q_uit
-  _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
-  ^ ^                   _p_opup hunk
-  _h_: first hunk
-  _l_: last hunk        set start _R_evision
+  _[__]_: prev/next  _s_tage      _q_uit
+  _{__}_: first/last _r_evert     _Q_uit and deactivate git-gutter
+  ^ ^^ ^             _p_opup      start _R_evision
 "
-  ("j" git-gutter:next-hunk)
-  ("k" git-gutter:previous-hunk)
-  ("h" (progn (goto-char (point-min))
+  ("]" git-gutter:next-hunk)
+  ("[" git-gutter:previous-hunk)
+  ("{" (progn (goto-char (point-min))
               (git-gutter:next-hunk 1)))
-  ("l" (progn (goto-char (point-min))
+  ("}" (progn (goto-char (point-min))
               (git-gutter:previous-hunk 1)))
   ("s" git-gutter:stage-hunk)
   ("r" git-gutter:revert-hunk)
@@ -294,7 +293,26 @@ Git gutter:
               (sit-for 0.1)
               (git-gutter:clear))
        :color blue)
-  ("." hydra-hail/body :color blue)
+  ("." nil :color blue)
+  )
+
+(defhydra cc/hydra-git (:color blue
+                               :hint nil)
+  "
+Git
+^-^--------^-^----------
+_g_it    | _s_tage
+_h_unks  | _d_iff
+_c_ommit | _t_imemachine
+"
+  ("g" magit-status)
+  ("h" cc/hydra-git-gutter/body)
+  ("c" magit-commit)
+  ("s" magit-stage-file)
+  ("d" magit-diff)
+  ("t" git-timemachine)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-ide (:exit t :hint nil)
@@ -320,6 +338,6 @@ Git gutter:
   ("M-s" lsp-describe-session)
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace)
-  ("." hydra-hail/body)
-  ("SPC" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
