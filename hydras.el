@@ -8,8 +8,9 @@
 _g_it  | _f_iles
 _o_rg  | _b_uffers
 _a_pp  | _p_rojects
-_s_esh | _w_indows
+_i_de  | _w_indows
 _d_esk | _l_ookup
+_s_esh |
 "
   ("f" cc/hydra-files/body)
   ("b" cc/hydra-buffers/body)
@@ -73,12 +74,12 @@ _[__]_: prev/next
 (defhydra cc/hydra-projects (:color blue
                              :hint nil)
   "
-%(projectile-project-root)
+%(projectile-project-name)
 ^-^--------|-^-^-----
 _p_rojects | _j_obs
 _a_dd      | _r_emove
 _s_ave all | _k_ill
-_i_ibuffer | _t_ree
+_i_buffer  | _t_ree
 "
   ("p" projectile-switch-project)
   ("a" projectile-add-known-project)
@@ -176,8 +177,20 @@ _c_apture | _s_earch
                            :hint nil)
   "
 Lookup
-^-^----|-^-^--
+^-^----|-^-^--------
+_r_efs | _o_nline
+_d_ef  | _D_ocs
+_f_ile | _i_n docset
+_I_n all docsets
 "
+  ("r" +lookup/references)
+  ("d" +lookup/definition)
+  ("f" +lookup/file)
+  ("I" +lookup/in-all-docsets)
+  ("o" +lookup/online-select)
+  ("D" +lookup/documentation)
+  ("i" +lookup/in-docset)
+  ("." nil)
   ("SPC" hydra-hail/body)
   )
 

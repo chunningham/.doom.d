@@ -34,4 +34,5 @@
   ;; create leader key
   (define-key objed-map (kbd "SPC") 'hydra-hail/body)
   (define-key objed-map (kbd "M-x") 'counsel-M-x)
+  (setq-default cursor-type 'bar)
   )
