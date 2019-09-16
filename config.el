@@ -34,5 +34,9 @@
   ;; create leader key
   (define-key objed-map (kbd "SPC") 'hydra-hail/body)
   (define-key objed-map (kbd "M-x") 'counsel-M-x)
+
+  ;; set S-SPC to toggle objed mode
+  (define-key objed-map (kbd "S-SPC") 'objed-quit)
+  (define-key global-map (kbd "S-SPC") 'objed-activate)
   (setq-default cursor-type 'bar)
   )

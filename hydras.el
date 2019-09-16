@@ -10,7 +10,7 @@ _o_rg  | _b_uffers
 _a_pp  | _p_rojects
 _i_de  | _w_indows
 _d_esk | _l_ookup
-_s_esh |
+_s_esh | _/_: search
 "
   ("f" cc/hydra-files/body)
   ("b" cc/hydra-buffers/body)
@@ -23,8 +23,26 @@ _s_esh |
   ("l" cc/hydra-lookup/body)
   ("i" cc/hydra-ide/body)
   ("w" cc/hydra-window/body)
+  ("/" cc/hydra-search/body)
   ("." nil)
   ("SPC" nil)
+  )
+
+(defhydra cc/hydra-search (:color blue
+                                  :hint nil)
+  "
+Search
+^-^-------
+_b_uffer
+_p_roject
+_d_eadgrep
+
+"
+  ("b" swiper)
+  ("p" counsel-projectile-ag)
+  ("d" nil)
+  ("." nil)
+  ("SPC" hydra-hail/body)
   )
 
 (defhydra cc/hydra-files (:color blue
@@ -57,6 +75,7 @@ Buffers
 _b_uffers | _s_cratch
 _k_ill    | _o_nly
 _m_enu    | _l_ast
+_/_: search
 _[__]_: prev/next
 "
   ("b" projectile-switch-to-buffer)
@@ -67,6 +86,7 @@ _[__]_: prev/next
   ("s" doom/open-project-scratch-buffer)
   ("o" doom/kill-other-buffers)
   ("l" projectile-previous-project-buffer)
+  ("/" swiper)
   ("." nil)
   ("SPC" hydra-hail/body)
   )
@@ -80,6 +100,7 @@ _p_rojects | _j_obs
 _a_dd      | _r_emove
 _s_ave all | _k_ill
 _i_buffer  | _t_ree
+_/_: search
 "
   ("p" projectile-switch-project)
   ("a" projectile-add-known-project)
@@ -89,6 +110,7 @@ _i_buffer  | _t_ree
   ("k" projectile-kill-buffers)
   ("i" projectile-ibuffer)
   ("t" treemacs)
+  ("/" counsel-projectile-ag)
   ("." nil)
   ("SPC" hydra-hail/body)
   )
