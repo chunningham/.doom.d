@@ -63,7 +63,7 @@
 
        :emacs
        (dired            ; making dired pretty [functional]
-       +ranger         ; bringing the goodness of ranger to dired
+       ;;+ranger         ; bringing the goodness of ranger to dired
        +icons          ; colorful icons for dired-mode
         )
        electric          ; smarter, keyword-based electric-indent
@@ -193,7 +193,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("f951343d4bbe5a90dba0f058de8317ca58a6822faa65d8463b0e751a07ec887c" default))
+   '("fad2171659aeb4953bf4834aa6a7c241a09274ad9d9386bf1394820cfd30b5cb" "bacb9a4ff3b790cda8b6d41bd74fea69510e309d41dd446d783b41e4e179a820" "f951343d4bbe5a90dba0f058de8317ca58a6822faa65d8463b0e751a07ec887c" default))
  '(objed-cursor-color "chartreuse4"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
