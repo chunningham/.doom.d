@@ -30,15 +30,10 @@
     ;;(cfw:ical-create-source "gcal" "https://..../basic.ics" "IndianRed") ; google calendar ICS
    )))
 
-(add-to-list 'custom-theme-load-path "~/.mymacs/themes/")
+(display-time)
 
-  (load-file "~/.doom.d/hydras.el")
-  (setq hydra-hint-display-type 'posframe)
-(after! hydra
-
-  ;; load my hydras
-  ;; set hydras to be posframes
-  )
+(load-file "~/.doom.d/hydras.el")
+(setq hydra-hint-display-type 'posframe)
 
 (after! objed
   ;; create leader key
@@ -56,7 +51,6 @@
   )
 
 (solaire-global-mode 0)
-
 
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
