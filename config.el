@@ -18,7 +18,7 @@
       org-gcal-file-alist '(("c.a.cunningham6@gmail.com" . "~/org/schedule.org")
                             ("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
 
-(defun my-open-calendar ()
+(defun my-open-calender ()
   (interactive)
   (cfw:open-calendar-buffer
    :contents-sources
@@ -48,6 +48,43 @@
 
 (after! company
   (define-key company-active-map (kbd "RET") 'company-complete-selection)
+  )
+
+(after! org
+  (setq org-todo-keywords
+        '((sequence
+           "TODO(t)"  ; A task that needs doing & is ready to do
+           "PROJ(p)"  ; An ongoing project that cannot be completed in one step
+           "STRT(s)"  ; A task that is in progress
+           "WAIT(w@)"  ; Something is holding up this task; or it is paused
+           "|"
+           "DONE(d!)"  ; Task successfully completed
+           "KILL(k@)") ; Task was cancelled, aborted or is no longer applicable
+          (sequence
+           "[ ](T)"   ; A task that needs doing
+           "[-](S)"   ; Task is in progress
+           "[?](W)"   ; Task is being held up or paused
+           "|"
+           "[X](D)")) ; Task was completed
+        org-capture-templates
+        '(("j" "Journal" entry
+           (file+olp+datetree "journal.org" "Inbox")
+           "* %U %?\n%i" :prepend t)
+          ("i" "Inbox" entry
+           (file+headline "gtd.org" "Inbox")
+           "* TODO %i%?\n%a")
+          ("T" "Tickler" entry
+           (file+headline "tickler.org" "Tickler")
+           "* %i%?\n%U")
+          ("b" "Brain" plain
+           (function org-brain-goto-end)
+           "* %i%?" :empty-lines 1))
+        org-refile-targets
+        '(("inbox.org" :maxlevel . 2)
+          ("projects.org" :maxlevel . 3)
+          ("someday.org" :level . 1)
+          ("tickler.org" :maxlevel . 2))
+        )
   )
 
 (solaire-global-mode 0)
