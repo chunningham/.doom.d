@@ -71,7 +71,7 @@
            (file+olp+datetree "journal.org" "Inbox")
            "* %U %?\n%i" :prepend t)
           ("i" "Inbox" entry
-           (file+headline "gtd.org" "Inbox")
+           (file "inbox.org")
            "* TODO %i%?\n%a")
           ("T" "Tickler" entry
            (file+headline "tickler.org" "Tickler")
@@ -86,6 +86,16 @@
           ("tickler.org" :maxlevel . 2))
         )
   )
+
+(use-package! md4rd
+  :config
+  (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
+  (setq md4rd-subs-active '(emacs lisp+Common_Lisp prolog clojure))
+  (setq md4rd--oauth-access-token
+        "236644830636-lQbAMvmd2Pf9xOXZaC_cuJ0vFwA")
+  (setq md4rd--oauth-refresh-token
+        "236644830636-ggej2y00GdK7vIvjoiYdzN9khj0")
+  (run-with-timer 0 3540 'md4rd-refresh-login))
 
 (solaire-global-mode 0)
 
