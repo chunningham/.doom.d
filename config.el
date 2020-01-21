@@ -7,7 +7,7 @@
 ;; brew install emacs-head --HEAD --with-cocoa --with-dbus --with-imagemagick
 ;; --with-jansson --with-mailutils --with-pdumper
 
-(setq doom-theme 'doom-molokai)
+(setq doom-theme 'doom-peacock)
 
 (setq user-full-name "Charles Cunningham"
       user-mail-address "c.a.cunningham6@gmail.com")
@@ -32,8 +32,8 @@
 
 (display-time)
 
-(load-file "~/.doom.d/hydras.el")
-(setq hydra-hint-display-type 'posframe)
+;; (load-file "~/.doom.d/hydras.el")
+;; (setq hydra-hint-display-type 'posframe)
 
 (after! objed
   ;; create leader key
@@ -53,26 +53,26 @@
 (after! org
   (setq org-todo-keywords
         '((sequence
-           "TODO(t)"  ; A task that needs doing & is ready to do
-           "PROJ(p)"  ; An ongoing project that cannot be completed in one step
-           "STRT(s)"  ; A task that is in progress
+           "TODO(t)"   ; A task that needs doing & is ready to do
+           "PROJ(p)"   ; An ongoing project that cannot be completed in one step
+           "STRT(s)"   ; A task that is in progress
            "WAIT(w@)"  ; Something is holding up this task; or it is paused
            "|"
-           "DONE(d!)"  ; Task successfully completed
-           "KILL(k@)") ; Task was cancelled, aborted or is no longer applicable
+           "DONE(d!)"   ; Task successfully completed
+           "KILL(k@)")  ; Task was cancelled, aborted or is no longer applicable
           (sequence
-           "[ ](T)"   ; A task that needs doing
-           "[-](S)"   ; Task is in progress
-           "[?](W)"   ; Task is being held up or paused
+           "[ ](T)"                     ; A task that needs doing
+           "[-](S)"                     ; Task is in progress
+           "[?](W)"                     ; Task is being held up or paused
            "|"
-           "[X](D)")) ; Task was completed
+           "[X](D)"))                   ; Task was completed
         org-capture-templates
         '(("j" "Journal" entry
            (file+olp+datetree "journal.org" "Inbox")
            "* %U %?\n%i" :prepend t)
           ("i" "Inbox" entry
            (file "inbox.org")
-           "* TODO %i%?\n%a")
+           "* TODO %i%?\n%a\n")
           ("T" "Tickler" entry
            (file+headline "tickler.org" "Tickler")
            "* %i%?\n%U")
@@ -90,12 +90,18 @@
 (use-package! md4rd
   :config
   (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
-  (setq md4rd-subs-active '(emacs lisp+Common_Lisp prolog clojure))
   (setq md4rd--oauth-access-token
         "236644830636-lQbAMvmd2Pf9xOXZaC_cuJ0vFwA")
   (setq md4rd--oauth-refresh-token
         "236644830636-ggej2y00GdK7vIvjoiYdzN9khj0")
-  (run-with-timer 0 3540 'md4rd-refresh-login))
+  (run-with-timer 0 3540 'md4rd-refresh-login)
+  (setq md4rd-subs-active '(all 40klore Amd Australia compsci Documentaries gaming
+                                emacs GrimDank holochain homestead ImaginaryWarhammer
+                                lisp listentothis me_irl movies news nosurf nottheonion
+                                PoliticalHumor politics programming Redox rust science
+                                space technology unixporn worldnews futurology)))
+
+(use-package! evil-tutor)
 
 (solaire-global-mode 0)
 

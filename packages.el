@@ -8,3 +8,4 @@
 
 (package! md4rd)
 
+(package! evil-tutor)
