@@ -7,16 +7,18 @@
 ;; brew install emacs-head --HEAD --with-cocoa --with-dbus --with-imagemagick
 ;; --with-jansson --with-mailutils --with-pdumper
 
-(setq doom-theme 'doom-peacock)
+(setq doom-theme 'doom-dark+)
 
 (setq user-full-name "Charles Cunningham"
       user-mail-address "c.a.cunningham6@gmail.com")
 
+(setq deft-directory org-directory)
+
 (after! calender
   (setq org-gcal-client-id "509352370358-o1j21kpjvjjs15iek9p7ocnv63f24oqc.apps.googleusercontent.com"
-      org-gcal-client-secret "Olqey39CAUc_Pc_xy_Og89W0"
-      org-gcal-file-alist '(("c.a.cunningham6@gmail.com" . "~/org/schedule.org")
-                            ("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
+        org-gcal-client-secret "Olqey39CAUc_Pc_xy_Og89W0"
+        org-gcal-file-alist '(("c.a.cunningham6@gmail.com" . "~/org/schedule.org")
+                              ("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
 
 (defun my-open-calender ()
   (interactive)
@@ -74,8 +76,14 @@
            (file "inbox.org")
            "* TODO %i%?\n%a\n")
           ("T" "Tickler" entry
-           (file+headline "tickler.org" "Tickler")
+           (file "tickler.org")
            "* %i%?\n%U")
+          ("c" "Current Task Note" entry
+           (clock)
+           "* %i%?\n%a")
+          ;; ("p" "Project todo" entry
+          ;;  (file+function "projects.org" projectile-project-name)
+          ;;  "* TODO %?\n %i\n %a")
           ("b" "Brain" plain
            (function org-brain-goto-end)
            "* %i%?" :empty-lines 1))
