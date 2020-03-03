@@ -87,7 +87,7 @@
        ;;ansible
        debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
+       docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)   ; run code, run (also, repls)
@@ -142,7 +142,7 @@
         ;; +hugo            ; use Emacs for hugo blogging
         ;; +jupyter        ; ipython/jupyter support for babel
         ;; +pandoc          ; export-with-pandoc support
-        +brain           ; one is better than none
+        ;; +brain           ; one is better than none
         +pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend

@@ -7,7 +7,7 @@
 ;; brew install emacs-head --HEAD --with-cocoa --with-dbus --with-imagemagick
 ;; --with-jansson --with-mailutils --with-pdumper
 
-(setq doom-theme 'doom-dark+)
+(setq doom-theme 'doom-molokai)
 
 (setq user-full-name "Charles Cunningham"
       user-mail-address "c.a.cunningham6@gmail.com")
@@ -30,7 +30,7 @@
     ;;(cfw:cal-create-source "Orange") ; diary source
     ;;(cfw:ical-create-source "Moon" "~/moon.ics" "Gray")  ; ICS source1
     ;;(cfw:ical-create-source "gcal" "https://..../basic.ics" "IndianRed") ; google calendar ICS
-   )))
+    )))
 
 (display-time)
 
@@ -81,9 +81,9 @@
           ("c" "Current Task Note" entry
            (clock)
            "* %i%?\n%a")
-          ;; ("p" "Project todo" entry
-          ;;  (file+function "projects.org" projectile-project-name)
-          ;;  "* TODO %?\n %i\n %a")
+          ("p" "Project todo" entry
+           (file+function "projects.org" projectile-project-name)
+           "* TODO %?\n %i\n %a")
           ("b" "Brain" plain
            (function org-brain-goto-end)
            "* %i%?" :empty-lines 1))
@@ -94,6 +94,29 @@
           ("tickler.org" :maxlevel . 2))
         )
   )
+
+(setq browse-url-browser-function 'xwidget-webkit-browse-url)
+(map! :n "SPC a m" 'mu4e
+      :n "SPC a b" 'xwidget-webkit-browse-url
+      :n "SPC a r" 'md4rd
+      :n "SPC a i" 'erc)
+
+(map! :n "SPC r r" 'org-roam
+      :n "SPC r i" 'org-roam-insert
+      :n "SPC r f" 'org-roam-find-file
+      :n "SPC r u" 'org-roam-update)
+
+(defun cc-switch-browser-buffer ()
+  "Switch to browser buffer"
+  (interactive)
+  (let ((this-command 'ivy-switch-buffer))
+    (ivy-read "Switch to buffer: " 'internal-complete-buffer
+              :matcher #'ivy--switch-buffer-matcher
+              :preselect (buffer-name (other-buffer (current-buffer)))
+              :action #'ivy--switch-buffer-action
+              :keymap ivy-switch-buffer-map
+              :caller 'ivy-switch-buffer
+              :update-fn 'ivy-call)))
 
 (use-package! md4rd
   :config
@@ -111,7 +134,50 @@
 
 (use-package! evil-tutor)
 
+(use-package! org-roam
+  :after org
+  :hook
+  (after-init . org-roam-mode)
+  :custom
+  (org-roam-directory "~/org/"))
+
 (solaire-global-mode 0)
 
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
+
+(defun mu4e-message-maildir-matches (msg rx)
+  (when rx
+    (if (listp rx)
+        ;; if rx is a list, try each one for a match
+        (or (mu4e-message-maildir-matches msg (car rx))
+            (mu4e-message-maildir-matches msg (cdr rx)))
+      ;; not a list, check rx
+      (string-match rx (mu4e-message-field msg :maildir)))))
+
+
+(after! mu4e
+  (setq mu4e-contexts
+        `( ,(make-mu4e-context
+	           :name "Private"
+	           :enter-func (lambda () (mu4e-message "Entering Private context"))
+             :leave-func (lambda () (mu4e-message "Leaving Private context"))
+	           ;; we match based on the contact-fields of the message
+	           :match-func (lambda (msg)
+			                     (when msg
+			                       (mu4e-message-maildir-matches msg "^/gmail")))
+	           :vars '( ( user-mail-address	    . "c.a.cunnignham6@gmail.com"  )
+		                  ( user-full-name	    . "Charles Cunningham" )
+		                  ( mu4e-compose-signature . "- Charles")))
+           ,(make-mu4e-context
+	           :name "Work"
+	           :enter-func (lambda () (mu4e-message "Switch to the Work context"))
+	           ;; no leave-func
+	           ;; we match based on the maildir of the message
+	           ;; this matches maildir /Arkham and its sub-directories
+	           :match-func (lambda (msg)
+			                     (when msg
+			                       (mu4e-message-maildir-matches msg "^/work")))
+	           :vars '( ( user-mail-address	     . "charles@jolocom.io" )
+		                  ( user-full-name	     . "Charles Cunningham" )
+		                  ( mu4e-compose-signature  . "- Charles Cunningham"))))))
