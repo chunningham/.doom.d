@@ -34,6 +34,11 @@
 
 (display-time)
 
+(use-package! exwm
+  :hook (exwm-mode . doom-mark-buffer-as-real)
+  )
+
+
 ;; (load-file "~/.doom.d/hydras.el")
 ;; (setq hydra-hint-display-type 'posframe)
 
@@ -96,15 +101,15 @@
   )
 
 (setq browse-url-browser-function 'xwidget-webkit-browse-url)
-(map! :n "SPC a m" 'mu4e
-      :n "SPC a b" 'xwidget-webkit-browse-url
-      :n "SPC a r" 'md4rd
-      :n "SPC a i" 'erc)
+(map! :n "SPC o m" 'mu4e
+      :n "SPC o i" 'erc)
 
-(map! :n "SPC r r" 'org-roam
-      :n "SPC r i" 'org-roam-insert
-      :n "SPC r f" 'org-roam-find-file
-      :n "SPC r u" 'org-roam-update)
+(map! :n "SPC n r r" 'org-roam
+      :n "SPC n r i" 'org-roam-insert
+      :n "SPC n r f" 'org-roam-find-file
+      :n "SPC n r u" 'org-roam-update)
+
+(map! :n "SPC !" 'shell-command)
 
 (defun cc-switch-browser-buffer ()
   "Switch to browser buffer"
