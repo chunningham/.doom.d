@@ -33,9 +33,10 @@
     )))
 
 (display-time)
+(display-battery-mode)
 
 (use-package! exwm
-  :hook (exwm-mode . doom-mark-buffer-as-real)
+  ;; :hook (exwm-mode . doom-mark-buffer-as-real)
   :config
   (unless (get 'exwm-workspace-number 'saved-value)
     (setq exwm-workspace-number 4))
@@ -55,13 +56,22 @@
             ([?\s-&] . (lambda (command)
                          (interactive (list (read-shell-command "$ ")))
                          (start-process-shell-command command nil command)))
+            ;; 's-q': Kill buffer.
+            ([?\s-q] . kill-this-buffer)
             ;; 's-N': Switch to certain workspace.
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
                           (lambda ()
                             (interactive)
                             (exwm-workspace-switch-create ,i))))
-                      (number-sequence 0 9)))))
+                      (number-sequence 0 9))
+            ;; s-hjkl: navigate windows
+            ([?\s-h] . evil-window-left)
+            ([?\s-j] . evil-window-down)
+            ([?\s-k] . evil-window-up)
+            ([?\s-l] . evil-window-right)
+            )
+          ))
   ;; Line-editing shortcuts
   (unless (get 'exwm-input-simulation-keys 'saved-value)
     (setq exwm-input-simulation-keys
@@ -75,13 +85,25 @@
             ([?\C-v] . [next])
             ([?\C-d] . [delete])
             ([?\C-k] . [S-end delete]))))
+
+  (use-package! exwm-randr
+    :hook (exwm-randr-screen-change . (lambda ()
+                                        (start-process-shell-command
+                                         "xrandr" nil "xrandr --output DP1 --mode 3840x2160 --above eDP1")))
+    :config
+    (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "DP1"))
+    (exwm-randr-enable))
+
   ;; Enable EXWM
   (exwm-enable)
   )
 
-
 ;; (load-file "~/.doom.d/hydras.el")
 ;; (setq hydra-hint-display-type 'posframe)
+(after! ivy
+  (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil))))
+
+
 
 (after! objed
   ;; create leader key
