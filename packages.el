@@ -13,3 +13,7 @@
 (package! org-roam :recipe (:host github :repo "jethrokuan/org-roam" :branch "develop"))
 
 (package! exwm)
+
+(package! desktop-environment)
+
+(package! mini-modeline)

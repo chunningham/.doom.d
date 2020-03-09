@@ -65,15 +65,17 @@
     (setq exwm-input-global-keys
           `(
             ;; 's-r': Reset (to line-mode).
-            ([?\s-r] . exwm-reset)
+            ((kbd "s-r") . exwm-reset)
             ;; 's-w': Switch workspace.
-            ([?\s-w] . exwm-workspace-switch)
-            ;; 's-&': Launch application.
-            ([?\s-&] . (lambda (command)
+            ((kbd "s-w") . exwm-workspace-switch)
+            ;; 's-d': Launch application.
+            ((kbd "s-d") . (lambda (command)
                          (interactive (list (read-shell-command "$ ")))
                          (start-process-shell-command command nil command)))
+            ;; 's-b': change buffer.
+            ((kbd "s-b") . ivy-switch-buffer)
             ;; 's-q': Kill buffer.
-            ([?\s-q] . kill-this-buffer)
+            ((kbd "s-q") . kill-this-buffer)
             ;; 's-N': Switch to certain workspace.
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
@@ -82,10 +84,19 @@
                             (exwm-workspace-switch-create ,i))))
                       (number-sequence 0 9))
             ;; s-hjkl: navigate windows
-            ([?\s-h] . evil-window-left)
-            ([?\s-j] . evil-window-down)
-            ([?\s-k] . evil-window-up)
-            ([?\s-l] . evil-window-right)
+            ((kbd "s-h") . evil-window-left)
+            ((kbd "s-j") . evil-window-down)
+            ((kbd "s-k") . evil-window-up)
+            ((kbd "s-l") . evil-window-right)
+
+            ;; s-HJKL: move windows
+            ((kbd "s-H") . +evil/window-move-left)
+            ((kbd "s-J") . +evil/window-move-down)
+            ((kbd "s-K") . +evil/window-move-up)
+            ((kbd "s-L") . +evil/window-move-right)
+
+            ;; s-SPC: global leader key
+            ;; ([?\s-SPC] . )
             )
           ))
   ;; Line-editing shortcuts
