@@ -38,12 +38,28 @@
 (use-package! exwm
   ;; :hook (exwm-mode . doom-mark-buffer-as-real)
   :config
+  (use-package! exwm-randr
+    :hook (exwm-randr-screen-change . (lambda ()
+                                        (start-process-shell-command
+                                         "xrandr" nil "xrandr --output DP1 --mode 3840x2160 --above eDP1")))
+    :config
+    (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "DP1"))
+    (exwm-randr-enable))
+
+  (use-package! desktop-environment
+    :config (desktop-environment-mode))
+
+  ;; (use-package! mini-modeline
+  ;;   :config (mini-modeline-mode t))
+
   (unless (get 'exwm-workspace-number 'saved-value)
     (setq exwm-workspace-number 4))
+
   ;; Make class name the buffer name
   (add-hook 'exwm-update-class-hook
             (lambda ()
               (exwm-workspace-rename-buffer exwm-class-name)))
+
   ;; Global keybindings.
   (unless (get 'exwm-input-global-keys 'saved-value)
     (setq exwm-input-global-keys
@@ -85,14 +101,6 @@
             ([?\C-v] . [next])
             ([?\C-d] . [delete])
             ([?\C-k] . [S-end delete]))))
-
-  (use-package! exwm-randr
-    :hook (exwm-randr-screen-change . (lambda ()
-                                        (start-process-shell-command
-                                         "xrandr" nil "xrandr --output DP1 --mode 3840x2160 --above eDP1")))
-    :config
-    (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "DP1"))
-    (exwm-randr-enable))
 
   ;; Enable EXWM
   (exwm-enable)
