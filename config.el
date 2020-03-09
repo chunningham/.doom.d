@@ -46,8 +46,7 @@
     (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "DP1"))
     (exwm-randr-enable))
 
-  (use-package! desktop-environment
-    :config (desktop-environment-mode))
+  (use-package! desktop-environment)
 
   ;; (use-package! mini-modeline
   ;;   :config (mini-modeline-mode t))
@@ -65,17 +64,17 @@
     (setq exwm-input-global-keys
           `(
             ;; 's-r': Reset (to line-mode).
-            ((kbd "s-r") . exwm-reset)
+            (,(kbd "s-r") . exwm-reset)
             ;; 's-w': Switch workspace.
-            ((kbd "s-w") . exwm-workspace-switch)
+            (,(kbd "s-w") . exwm-workspace-switch)
             ;; 's-d': Launch application.
-            ((kbd "s-d") . (lambda (command)
-                         (interactive (list (read-shell-command "$ ")))
-                         (start-process-shell-command command nil command)))
+            (,(kbd "s-d") . (lambda (command)
+                              (interactive (list (read-shell-command "$ ")))
+                              (start-process-shell-command command nil command)))
             ;; 's-b': change buffer.
-            ((kbd "s-b") . ivy-switch-buffer)
+            (,(kbd "s-b") . ivy-switch-buffer)
             ;; 's-q': Kill buffer.
-            ((kbd "s-q") . kill-this-buffer)
+            (,(kbd "s-q") . kill-this-buffer)
             ;; 's-N': Switch to certain workspace.
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
@@ -84,17 +83,37 @@
                             (exwm-workspace-switch-create ,i))))
                       (number-sequence 0 9))
             ;; s-hjkl: navigate windows
-            ((kbd "s-h") . evil-window-left)
-            ((kbd "s-j") . evil-window-down)
-            ((kbd "s-k") . evil-window-up)
-            ((kbd "s-l") . evil-window-right)
+            (,(kbd "s-h") . evil-window-left)
+            (,(kbd "s-j") . evil-window-down)
+            (,(kbd "s-k") . evil-window-up)
+            (,(kbd "s-l") . evil-window-right)
 
             ;; s-HJKL: move windows
-            ((kbd "s-H") . +evil/window-move-left)
-            ((kbd "s-J") . +evil/window-move-down)
-            ((kbd "s-K") . +evil/window-move-up)
-            ((kbd "s-L") . +evil/window-move-right)
-
+            (,(kbd "s-H") . +evil/window-move-left)
+            (,(kbd "s-J") . +evil/window-move-down)
+            (,(kbd "s-K") . +evil/window-move-up)
+            (,(kbd "s-L") . +evil/window-move-right)
+            ;; Brightness
+            (,(kbd "<XF86MonBrightnessUp>") . ,(function desktop-environment-brightness-increment))
+            (,(kbd "<XF86MonBrightnessDown>") . ,(function desktop-environment-brightness-decrement))
+            (,(kbd "S-<XF86MonBrightnessUp>") . ,(function desktop-environment-brightness-increment-slowly))
+            (,(kbd "S-<XF86MonBrightnessDown>") . ,(function desktop-environment-brightness-decrement-slowly))
+            ;; Volume
+            (,(kbd "<XF86AudioRaiseVolume>") . ,(function desktop-environment-volume-increment))
+            (,(kbd "<XF86AudioLowerVolume>") . ,(function desktop-environment-volume-decrement))
+            (,(kbd "S-<XF86AudioRaiseVolume>") . ,(function desktop-environment-volume-increment-slowly))
+            (,(kbd "S-<XF86AudioLowerVolume>") . ,(function desktop-environment-volume-decrement-slowly))
+            (,(kbd "<XF86AudioMute>") . ,(function desktop-environment-toggle-mute))
+            ;; (,(kbd "<XF86AudioMicMute>") . ,(function desktop-environment-toggle-microphone-mute))
+            ;; Volume
+            ;; (,(kbd "S-<print>") . ,(function desktop-environment-screenshot-part))
+            ;; (,(kbd "<print>") . ,(function desktop-environment-screenshot))
+            ;; Screen locking
+            ;; (,(kbd "s-l") . ,(function desktop-environment-lock-screen))
+            ;; Wifi controls
+            ;; (,(kbd "<XF86WLAN>") . ,(function desktop-environment-toggle-wifi))
+            ;; Bluetooth controls
+            ;; (,(kbd "<XF86Bluetooth>") . ,(function desktop-environment-toggle-bluetooth))
             ;; s-SPC: global leader key
             ;; ([?\s-SPC] . )
             )
