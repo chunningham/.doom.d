@@ -73,8 +73,16 @@
                               (start-process-shell-command command nil command)))
             ;; 's-b': change buffer.
             (,(kbd "s-b") . ivy-switch-buffer)
-            ;; 's-q': Kill buffer.
-            (,(kbd "s-q") . kill-this-buffer)
+            ;; 's-q': Kill window.
+            (,(kbd "s-q") . evil-window-delete)
+            ;; 's-Q': Kill window and buffer.
+            (,(kbd "s-Q") . kill-buffer-and-window)
+            ;; 's-s': Split Vertically
+            (,(kbd "s-s") . evil-window-vsplit)
+            ;; 's-S': Split Horizontally
+            (,(kbd "s-S") . evil-window-split)
+            ;; 's-RET': popup terminal
+            (,(kbd "s-RET") . +vterm/toggle)
             ;; 's-N': Switch to certain workspace.
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
