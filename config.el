@@ -79,8 +79,10 @@
             (,(kbd "s-d") . (lambda (command)
                               (interactive (list (read-shell-command "$ ")))
                               (start-process-shell-command command nil command)))
-            ;; 's-b': change buffer.
-            (,(kbd "s-b") . ivy-switch-buffer)
+            ;; 's-,': change buffer.
+            (,(kbd "s-,") . counsel-switch-buffer)
+            ;; 's-.': open file.
+            (,(kbd "s-.") . counsel-find-file)
             ;; 's-q': Kill window.
             (,(kbd "s-q") . evil-window-delete)
             ;; 's-Q': Kill window and buffer.
@@ -89,7 +91,7 @@
             (,(kbd "s-s") . evil-window-vsplit)
             ;; 's-S': Split Horizontally
             (,(kbd "s-S") . evil-window-split)
-            ;; 's-RET': popup terminal
+            ;; 's-RET': popup terminal TODO: broken
             (,(kbd "s-RET") . +vterm/toggle)
             ;; 's-N': Switch to certain workspace.
             ,@(mapcar (lambda (i)
@@ -109,19 +111,27 @@
             (,(kbd "s-J") . +evil/window-move-down)
             (,(kbd "s-K") . +evil/window-move-up)
             (,(kbd "s-L") . +evil/window-move-right)
+
+            ;; s-M-hjkl: resize windows
+            (,(kbd "s-M-h") . evil-window-decrease-width)
+            (,(kbd "s-M-j") . evil-window-decrease-height)
+            (,(kbd "s-M-k") . evil-window-increase-height)
+            (,(kbd "s-M-l") . evil-window-increase-width)
+
             ;; Brightness
             (,(kbd "<XF86MonBrightnessUp>") . ,(function desktop-environment-brightness-increment))
             (,(kbd "<XF86MonBrightnessDown>") . ,(function desktop-environment-brightness-decrement))
             (,(kbd "S-<XF86MonBrightnessUp>") . ,(function desktop-environment-brightness-increment-slowly))
             (,(kbd "S-<XF86MonBrightnessDown>") . ,(function desktop-environment-brightness-decrement-slowly))
+
             ;; Volume
             (,(kbd "<XF86AudioRaiseVolume>") . ,(function desktop-environment-volume-increment))
             (,(kbd "<XF86AudioLowerVolume>") . ,(function desktop-environment-volume-decrement))
             (,(kbd "S-<XF86AudioRaiseVolume>") . ,(function desktop-environment-volume-increment-slowly))
             (,(kbd "S-<XF86AudioLowerVolume>") . ,(function desktop-environment-volume-decrement-slowly))
             (,(kbd "<XF86AudioMute>") . ,(function desktop-environment-toggle-mute))
+
             ;; (,(kbd "<XF86AudioMicMute>") . ,(function desktop-environment-toggle-microphone-mute))
-            ;; Volume
             ;; (,(kbd "S-<print>") . ,(function desktop-environment-screenshot-part))
             ;; (,(kbd "<print>") . ,(function desktop-environment-screenshot))
             ;; Screen locking
@@ -131,7 +141,7 @@
             ;; Bluetooth controls
             ;; (,(kbd "<XF86Bluetooth>") . ,(function desktop-environment-toggle-bluetooth))
             ;; s-SPC: global leader key
-            ;; ([?\s-SPC] . )
+            ;; (,(kbd "s-SPC") . )
             )
           ))
   ;; Line-editing shortcuts
