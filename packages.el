@@ -16,4 +16,6 @@
 
 (package! desktop-environment)
 
+(package! smart-mode-line)
+
 (package! mini-modeline)

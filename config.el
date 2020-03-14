@@ -35,6 +35,17 @@
 (display-time)
 (display-battery-mode)
 
+(use-package! smart-mode-line
+  :config
+  (sml/setup)
+  (setq sml/theme 'dark
+        rm-whitelist '(yas)))
+
+(use-package! mini-modeline
+  :after smart-mode-line
+  :config (mini-modeline-mode t))
+
+
 (use-package! exwm
   ;; :hook (exwm-mode . doom-mark-buffer-as-real)
   :config
@@ -47,9 +58,6 @@
     (exwm-randr-enable))
 
   (use-package! desktop-environment)
-
-  ;; (use-package! mini-modeline
-  ;;   :config (mini-modeline-mode t))
 
   (unless (get 'exwm-workspace-number 'saved-value)
     (setq exwm-workspace-number 4))
