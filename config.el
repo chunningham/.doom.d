@@ -45,6 +45,11 @@
   :after smart-mode-line
   :config (mini-modeline-mode t))
 
+(use-package! which-key-posframe
+  :config
+  (which-key-posframe-mode)
+  (setq which-key-posframe-parameters '((min-width . 90) (min-height . 5) (parent-frame . nil)))
+  )
 
 (use-package! exwm
   ;; :hook (exwm-mode . doom-mark-buffer-as-real)
@@ -165,7 +170,8 @@
 ;; (load-file "~/.doom.d/hydras.el")
 ;; (setq hydra-hint-display-type 'posframe)
 (after! ivy
-  (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil))))
+  (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil)))
+  )
 
 
 

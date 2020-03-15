@@ -19,3 +19,5 @@
 (package! smart-mode-line)
 
 (package! mini-modeline)
+
+(package! which-key-posframe)
