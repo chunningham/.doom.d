@@ -84,10 +84,10 @@
             (,(kbd "s-d") . (lambda (command)
                               (interactive (list (read-shell-command "$ ")))
                               (start-process-shell-command command nil command)))
-            ;; 's-,': change buffer.
-            (,(kbd "s-,") . counsel-switch-buffer)
-            ;; 's-.': open file.
-            (,(kbd "s-.") . counsel-find-file)
+            ;; 's-b': change buffer.
+            (,(kbd "s-b") . counsel-switch-buffer)
+            ;; 's-f': open file.
+            (,(kbd "s-f") . counsel-find-file)
             ;; 's-q': Kill window.
             (,(kbd "s-q") . evil-window-delete)
             ;; 's-Q': Kill window and buffer.
@@ -96,6 +96,8 @@
             (,(kbd "s-s") . evil-window-vsplit)
             ;; 's-S': Split Horizontally
             (,(kbd "s-S") . evil-window-split)
+            ;; 's-u': winner-undo
+            (,(kbd "s-u") . winner-undo)
             ;; 's-RET': popup terminal TODO: broken
             (,(kbd "s-RET") . +vterm/toggle)
             ;; 's-N': Switch to certain workspace.
@@ -243,6 +245,8 @@
       :n "SPC n r u" 'org-roam-update)
 
 (map! :n "SPC !" 'shell-command)
+
+(map! :n "U" 'undo-tree-redo)
 
 (defun cc-switch-browser-buffer ()
   "Switch to browser buffer"
