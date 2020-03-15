@@ -235,7 +235,7 @@
         )
   )
 
-(setq browse-url-browser-function 'xwidget-webkit-browse-url)
+(setq browse-url-browser-function 'firefox)
 (map! :n "SPC o m" 'mu4e
       :n "SPC o i" 'erc)
 
