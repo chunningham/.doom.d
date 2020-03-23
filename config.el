@@ -64,6 +64,20 @@
 
   (use-package! desktop-environment)
 
+  (use-package! gpastel
+    :config
+    (gpastel-mode)
+    (defun my/exwm-counsel-yank-pop ()
+      "Same as 'counsel-yank-pop' and paste into exwm buffer."
+      (interactive)
+      (let ((inhibit-read-only t)
+            ;; Make sure we send selected yank-pop candidate to clipboard:
+            (yank-pop-change-selection t))
+        (call-interactively #'counsel-yank-pop))
+      (when (derived-mode-p 'exwm-mode)
+        (exwm-input--set-focus (exwm--buffer->id (window-buffer (selected-window))))
+        (exwm-input--fake-key ?\C-v))))
+
   (unless (get 'exwm-workspace-number 'saved-value)
     (setq exwm-workspace-number 4))
 

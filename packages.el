@@ -19,3 +19,5 @@
 (package! mini-modeline)
 
 (package! which-key-posframe)
+
+(package! gpastel)
