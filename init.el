@@ -8,6 +8,12 @@
 ;; More information about these modules (and what flags they support) can be
 ;; found in modules/README.org.
 
+;; a hack to get the right path for mu4e
+(eval-when-compile
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+  (require 'use-package))
+(use-package mu4e)
+
 (doom! :input
        ;;chinese
        ;;japanese
@@ -79,7 +85,7 @@
        :checkers
        (syntax           ; tasing you for every semicolon you forget
         +childframe)
-       ;;spell             ; tasing you for misspelling mispelling
+       spell         ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -94,7 +100,7 @@
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
        lsp
-       macos             ; MacOS-specific commands
+       ;;macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        pass              ; password manager for nerds
