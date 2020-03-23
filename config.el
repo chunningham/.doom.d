@@ -48,7 +48,7 @@
 (use-package! which-key-posframe
   :config
   (which-key-posframe-mode)
-  (setq which-key-posframe-parameters '((min-width . 90) (min-height . 5) (parent-frame . nil)))
+  (setq which-key-posframe-parameters '((min-width . 140) (min-height . 10) (parent-frame . nil)))
   )
 
 (use-package! exwm
@@ -85,27 +85,40 @@
   (add-hook 'exwm-update-class-hook
             (lambda ()
               (exwm-workspace-rename-buffer exwm-class-name)))
-
   ;; Global keybindings.
   (unless (get 'exwm-input-global-keys 'saved-value)
     (setq exwm-input-global-keys
           `(
+            ;; s-SPC: global leader key
+            (,(kbd "s-SPC") . (general-simulate-key "SPC" :state 'normal))
             ;; 's-r': Reset (to line-mode).
             (,(kbd "s-r") . exwm-reset)
             ;; 's-w': Switch workspace.
             (,(kbd "s-w") . exwm-workspace-switch)
+            ;; 's-p': paste.
+            (,(kbd "s-p") . my/exwm-counsel-yank-pop)
+            ;; s-y': copy.
+            ;; (,(kbd "s-y") . )
             ;; 's-d': Launch application.
-            (,(kbd "s-d") . (lambda (command)
-                              (interactive (list (read-shell-command "$ ")))
-                              (start-process-shell-command command nil command)))
+            (,(kbd "s-d") . counsel-linux-app)
             ;; 's-b': change buffer.
             (,(kbd "s-b") . counsel-switch-buffer)
             ;; 's-f': open file.
             (,(kbd "s-f") . counsel-find-file)
             ;; 's-q': Kill window.
             (,(kbd "s-q") . evil-window-delete)
-            ;; 's-Q': Kill window and buffer.
-            (,(kbd "s-Q") . kill-buffer-and-window)
+            ;; 's-Q': Kill buffer.
+            (,(kbd "s-Q") . kill-this-buffer)
+            ;; 's-M-q': Kill window and buffer
+            (,(kbd "s-M-q") . kill-buffer-and-window)
+            ;; 's-x': org-capture
+            (,(kbd "s-x") . org-capture)
+            ;; 's-a': org-agenda
+            (,(kbd "s-a") . org-agenda)
+            ;; 's-`': previous buffer
+            (,(kbd "s-`") . evil-switch-to-windows-last-buffer)
+            ;; 's-m': maximize window
+            (,(kbd "s-m") . doom/window-maximize-buffer)
             ;; 's-s': Split Vertically
             (,(kbd "s-s") . evil-window-vsplit)
             ;; 's-S': Split Horizontally
@@ -161,8 +174,6 @@
             ;; (,(kbd "<XF86WLAN>") . ,(function desktop-environment-toggle-wifi))
             ;; Bluetooth controls
             ;; (,(kbd "<XF86Bluetooth>") . ,(function desktop-environment-toggle-bluetooth))
-            ;; s-SPC: global leader key
-            ;; (,(kbd "s-SPC") . )
             )
           ))
   ;; Line-editing shortcuts
@@ -262,18 +273,6 @@
 
 (map! :n "U" 'undo-tree-redo)
 
-(defun cc-switch-browser-buffer ()
-  "Switch to browser buffer"
-  (interactive)
-  (let ((this-command 'ivy-switch-buffer))
-    (ivy-read "Switch to buffer: " 'internal-complete-buffer
-              :matcher #'ivy--switch-buffer-matcher
-              :preselect (buffer-name (other-buffer (current-buffer)))
-              :action #'ivy--switch-buffer-action
-              :keymap ivy-switch-buffer-map
-              :caller 'ivy-switch-buffer
-              :update-fn 'ivy-call)))
-
 (use-package! md4rd
   :config
   (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
@@ -287,8 +286,6 @@
                                 lisp listentothis me_irl movies news nosurf nottheonion
                                 PoliticalHumor politics programming Redox rust science
                                 space technology unixporn worldnews futurology)))
-
-(use-package! evil-tutor)
 
 (use-package! org-roam
   :after org
