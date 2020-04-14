@@ -181,9 +181,9 @@
 
 ;; (load-file "~/.doom.d/hydras.el")
 ;; (setq hydra-hint-display-type 'posframe)
-(after! ivy
-  (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil)))
-  )
+;; (after! ivy
+  ;; (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil)))
+  ;; )
 
 ;; taken from sarg
 ;; fix posframes
@@ -198,6 +198,8 @@
   (ivy-posframe--display str #'cc/ivy-posframe-poshandler))
 
 (after! ivy-posframe
+  (load! "window")
+
   (setq ivy-posframe-display-functions-alist '((t . cc/ivy-posframe-exwm))
         ivy-posframe-parameters '((parent-frame nil)))
   )
