@@ -7,7 +7,7 @@
 ;; brew install emacs-head --HEAD --with-cocoa --with-dbus --with-imagemagick
 ;; --with-jansson --with-mailutils --with-pdumper
 
-(setq doom-theme 'doom-molokai)
+(setq doom-theme 'doom-manegarm)
 
 (setq user-full-name "Charles Cunningham"
       user-mail-address "c.a.cunningham6@gmail.com")
@@ -35,24 +35,14 @@
 (display-time)
 (display-battery-mode)
 
-(use-package! smart-mode-line
-  :config
-  (sml/setup)
-  (setq sml/theme 'dark
-        rm-whitelist '(yas)))
-
-(use-package! mini-modeline
-  :after smart-mode-line
-  :config (mini-modeline-mode t))
-
 (use-package! which-key-posframe
   :config
   (which-key-posframe-mode)
-  (setq which-key-posframe-parameters '((min-width . 140) (min-height . 10) (parent-frame . nil)))
+  (setq which-key-posframe-parameters '((min-width . 180) (min-height . 30) (parent-frame . nil)))
   )
 
 (use-package! exwm
-  ;; :hook (exwm-mode . doom-mark-buffer-as-real)
+  ;; :hook exwm-layout-hide-mode-line
   :config
   (use-package! exwm-randr
     :hook (exwm-randr-screen-change . (lambda ()
@@ -90,11 +80,13 @@
     (setq exwm-input-global-keys
           `(
             ;; s-SPC: global leader key
-            (,(kbd "s-SPC") . (general-simulate-key "SPC" :state 'normal))
+            (,(kbd "s-SPC") . my/press-leader-key)
             ;; 's-r': Reset (to line-mode).
             (,(kbd "s-r") . exwm-reset)
             ;; 's-w': Switch workspace.
             (,(kbd "s-w") . exwm-workspace-switch)
+            ;; 's-W': Move buffer to workspace
+            (,(kbd "s-W") . exwm-workspace-move-window)
             ;; 's-p': paste.
             (,(kbd "s-p") . my/exwm-counsel-yank-pop)
             ;; s-y': copy.
@@ -125,8 +117,10 @@
             (,(kbd "s-S") . evil-window-split)
             ;; 's-u': winner-undo
             (,(kbd "s-u") . winner-undo)
-            ;; 's-RET': popup terminal TODO: broken
-            (,(kbd "s-RET") . +vterm/toggle)
+            ;; 's-t': popup terminal
+            (,(kbd "s-t") . +vterm/toggle)
+            ;; 's-T': terminal in this window
+            (,(kbd "s-T") . +vterm/here)
             ;; 's-N': Switch to certain workspace.
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
@@ -179,16 +173,7 @@
   ;; Line-editing shortcuts
   (unless (get 'exwm-input-simulation-keys 'saved-value)
     (setq exwm-input-simulation-keys
-          '(([?\C-b] . [left])
-            ([?\C-f] . [right])
-            ([?\C-p] . [up])
-            ([?\C-n] . [down])
-            ([?\C-a] . [home])
-            ([?\C-e] . [end])
-            ([?\M-v] . [prior])
-            ([?\C-v] . [next])
-            ([?\C-d] . [delete])
-            ([?\C-k] . [S-end delete]))))
+          '()))
 
   ;; Enable EXWM
   (exwm-enable)
@@ -200,6 +185,22 @@
   (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil)))
   )
 
+;; taken from sarg
+;; fix posframes
+(defun cc/ivy-posframe-poshandler (info)
+  (let ((workarea (elt exwm-workspace--workareas exwm-workspace-current-index))
+        (return-value (posframe-poshandler-frame-center info)))
+   
+    (cons (+ (aref workarea 0) (car return-value))
+          (+ (aref workarea 1) (cdr return-value)))))
+
+(defun cc/ivy-posframe-exwm (str)
+  (ivy-posframe--display str #'cc/ivy-posframe-poshandler))
+
+(after! ivy-posframe
+  (setq ivy-posframe-display-functions-alist '((t . cc/ivy-posframe-exwm))
+        ivy-posframe-parameters '((parent-frame nil)))
+  )
 
 
 (after! objed
@@ -248,10 +249,7 @@
            "* %i%?\n%a")
           ("p" "Project todo" entry
            (file+function "projects.org" projectile-project-name)
-           "* TODO %?\n %i\n %a")
-          ("b" "Brain" plain
-           (function org-brain-goto-end)
-           "* %i%?" :empty-lines 1))
+           "* TODO %?\n %i\n %a"))
         org-refile-targets
         '(("inbox.org" :maxlevel . 2)
           ("projects.org" :maxlevel . 3)
@@ -296,9 +294,6 @@
 
 (solaire-global-mode 0)
 
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
-
 (defun mu4e-message-maildir-matches (msg rx)
   (when rx
     (if (listp rx)
@@ -334,3 +329,61 @@
 	           :vars '( ( user-mail-address	     . "charles@jolocom.io" )
 		                  ( user-full-name	     . "Charles Cunningham" )
 		                  ( mu4e-compose-signature  . "- Charles Cunningham"))))))
+
+(use-package! slack
+  :init
+  (setq slack-buffer-emojify t          ; if you want emojis
+        slack-prefer-current-team t)
+  (set-popup-rule! "^\\*Slack" :ignore t)
+  :config
+  (map! :map slack-info-mode-map
+        :localleader
+        :desc "update" "u" 'slack-room-update-messages)
+  (map! :map slack-mode-map
+        :localleader
+        :desc "kill" "c" 'slack-buffer-kill
+        (:prefix-map ("r" . "reactions")
+          :desc "add" "a" 'slack-message-add-reaction
+          :desc "remove" "r" 'slack-message-remove-reaction
+          :desc "list who" "l" 'slack-message-show-reaction-users)
+        (:prefix-map ("p" . "pinned")
+          :desc "list" "l" 'slack-room-pins-list
+          :desc "add" "a" 'slack-message-pins-add
+          :desc "remove" "r" 'slack-message-pins-remove)
+        (:prefix-map ("m" . "messages")
+          :desc "write" "m" 'slack-message-write-another-buffer
+          :desc "edit" "e" 'slack-message-edit
+          :desc "delete" "d" 'slack-mseeage-delete)
+        :desc "update" "u" 'slack-room-update-messages
+        :desc "mention user" "2" 'slack-message-embed-mention
+        :desc "mention channel" "3" 'slack-message-embed-channel)
+  (map! :map slack-edit-message-mode-map
+        :localleader
+        :desc "cancel" "c" 'slack-message-cancel-edit
+        :desc "send" "s" 'slack-message-send-from-buffer
+        :desc "mention user" "2" 'slack-message-embed-mention
+        :desc "mention channel" "3" 'slack-message-embed-channel)
+
+  (slack-start))
+
+(use-package! sauron
+  :config
+  (setq sauron-separate-frame nil
+        sauron-modules '(sauron-dbus sauron-org)
+        sauron-max-line-length 120)
+  (set-popup-rule! (regexp-quote sr-buffer-name)
+    :size 0.25 :side 'bottom
+    :select t :quit t :ttl nil)
+
+  (after! slack
+    (load! "sauron-slack")
+    (add-to-list 'sauron-modules 'sauron-slack)
+    (sauron-slack-start))
+
+  (when (featurep! :editor evil)
+    (add-to-list 'evil-normal-state-modes 'sauron-mode)
+    (map! :map sauron-mode-map
+          :n "RET" 'sauron-activate-event
+          :n "c" 'sauron-clear))
+
+  (sauron-start-hidden))

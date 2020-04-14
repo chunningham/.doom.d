@@ -14,10 +14,16 @@
 
 (package! desktop-environment)
 
-(package! smart-mode-line)
-
-(package! mini-modeline)
-
 (package! which-key-posframe)
 
 (package! gpastel)
+
+(package! doct)
+
+(package! slack)
+
+(package! sauron)
+
+;; (package! lastfm)
+
+;; (package! vuiet)
