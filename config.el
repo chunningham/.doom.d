@@ -75,6 +75,16 @@
   (add-hook 'exwm-update-class-hook
             (lambda ()
               (exwm-workspace-rename-buffer exwm-class-name)))
+
+  (general-simulate-key "SPC" :state 'normal)
+
+  (defun my/press-leader-key ()
+    "Activate the evil leader keymap"
+    (interactive)
+    (general-simulate-SPC-in-normal-state))
+
+  (setq lsp-keymap-prefix "s-<return>")
+
   ;; Global keybindings.
   (unless (get 'exwm-input-global-keys 'saved-value)
     (setq exwm-input-global-keys
@@ -260,9 +270,25 @@
         )
   )
 
-(setq browse-url-browser-function 'firefox)
+;; (use-package! doct
+;;   :after (org)
+;;   :config
+;;   (setq org-capture-templates
+;;         (doct '(("Journal" :keys "j"
+;;                  :file "journal.org"
+;;                  :template "* %U %?\n%i"
+;;                  :datetree t
+;;                  )
+;;                 ("Inbox" :keys "i"
+;;                  :file "inbox.org"
+;;                  :template "* TODO %i%?\n%a\n")))))
+
+(setq browse-url-browser-function 'browse-url-firefox)
 (map! :n "SPC o m" 'mu4e
-      :n "SPC o i" 'erc)
+      :n "SPC o i" 'erc
+      :n "SPC o s c" 'slack-channel-select
+      :n "SPC o s d" 'slack-im-select
+      :n "SPC o s u" 'slack-all-unreads)
 
 (map! :n "SPC n r r" 'org-roam
       :n "SPC n r i" 'org-roam-insert
