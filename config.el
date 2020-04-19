@@ -41,8 +41,13 @@
   (setq which-key-posframe-parameters '((min-width . 180) (min-height . 30) (parent-frame . nil)))
   )
 
+(defun cc/make-real ()
+  (interactive)
+  (doom-mark-buffer-as-real-h))
+
 (use-package! exwm
-  ;; :hook exwm-layout-hide-mode-line
+  ;; :hook doom-mark-buffer-as-real-h
+  ;; :hook (exwm-mode . doom-mark-buffer-as-real-h)
   :config
   (use-package! exwm-randr
     :hook (exwm-randr-screen-change . (lambda ()
@@ -197,22 +202,22 @@
 
 ;; taken from sarg
 ;; fix posframes
-(defun cc/ivy-posframe-poshandler (info)
-  (let ((workarea (elt exwm-workspace--workareas exwm-workspace-current-index))
-        (return-value (posframe-poshandler-frame-center info)))
-   
-    (cons (+ (aref workarea 0) (car return-value))
-          (+ (aref workarea 1) (cdr return-value)))))
+;; (defun cc/ivy-posframe-poshandler (info)
+;;   (let ((workarea (elt exwm-workspace--workareas exwm-workspace-current-index))
+;;         (return-value (posframe-poshandler-frame-center info)))
 
-(defun cc/ivy-posframe-exwm (str)
-  (ivy-posframe--display str #'cc/ivy-posframe-poshandler))
+;;     (cons (+ (aref workarea 0) (car return-value))
+;;           (+ (aref workarea 1) (cdr return-value)))))
 
-(after! ivy-posframe
-  (load! "window")
+;; (defun cc/ivy-posframe-exwm (str)
+;;   (ivy-posframe--display str #'cc/ivy-posframe-poshandler))
 
-  (setq ivy-posframe-display-functions-alist '((t . cc/ivy-posframe-exwm))
-        ivy-posframe-parameters '((parent-frame nil)))
-  )
+;; (after! ivy-posframe
+;;   (load! "window")
+
+;;   (setq ivy-posframe-display-functions-alist '((t . cc/ivy-posframe-exwm))
+;;         ivy-posframe-parameters '((parent-frame nil)))
+;;   )
 
 
 (after! objed
@@ -364,6 +369,28 @@
         slack-prefer-current-team t)
   (set-popup-rule! "^\\*Slack" :ignore t)
   :config
+  (slack-register-team
+   :name "jolocom"
+   :default t
+   :token "xoxs-3647896349-562530281909-1020866050723-e924ddc0ece43dc42171d75c1f8c9c0ce6187d1f020ee15d70447702e50627bf"
+   :subscribed-channels '(availability calendar design_n_content dev dev_business dev_identity
+                                       dev_integrations devdev dif eevents eljolocomworkshop
+                                       external_comm general hid hiringnew lunch osip-interop-poc
+                                       p2p papyri positioning_and_messaging privacyassessment
+                                       productownerteam socialmedia standup strategy team telekom
+                                       tellingstories urgent waldemarstr-37a website whitepaper))
+
+  (slack-register-team
+   :name "difdn"
+   :token "xoxs-165669436000-544672028195-1002487213604-c5a4989d942b796943791e6b893b1bf5fa0baf6fbd6ac86a42edffe9304ebc17"
+   :subscribed-channels '(general interop_project peer-did wg-auth wg-claims-credentials
+                                  wg-didcomm wg-id))
+
+  (slack-register-team
+   :name "odysseyssiteam"
+   :token "xoxs-935348418500-937668157335-985592732129-2f2376cbfa3ebe40e14c5f2790af4099553ed70c168b0609ae2b97b1b690930e"
+   :subscribed-channels '(allgemein ssi-interop-odyssey))
+
   (map! :map slack-info-mode-map
         :localleader
         :desc "update" "u" 'slack-room-update-messages)
