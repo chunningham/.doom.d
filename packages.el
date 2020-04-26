@@ -6,10 +6,6 @@
 ;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
-(package! md4rd)
-
-(package! org-roam :recipe (:host github :repo "jethrokuan/org-roam" :branch "master"))
-
 (package! exwm)
 
 (package! desktop-environment)

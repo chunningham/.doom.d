@@ -17,8 +17,7 @@
 (after! calender
   (setq org-gcal-client-id "509352370358-o1j21kpjvjjs15iek9p7ocnv63f24oqc.apps.googleusercontent.com"
         org-gcal-client-secret "Olqey39CAUc_Pc_xy_Og89W0"
-        org-gcal-file-alist '(("c.a.cunningham6@gmail.com" . "~/org/schedule.org")
-                              ("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
+        org-gcal-file-alist '(("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
 
 (defun my-open-calender ()
   (interactive)
@@ -295,35 +294,20 @@
       :n "SPC o s d" 'slack-im-select
       :n "SPC o s u" 'slack-all-unreads)
 
-(map! :n "SPC n r r" 'org-roam
-      :n "SPC n r i" 'org-roam-insert
-      :n "SPC n r f" 'org-roam-find-file
-      :n "SPC n r u" 'org-roam-update)
-
-(map! :n "SPC !" 'shell-command)
-
 (map! :n "U" 'undo-tree-redo)
 
-(use-package! md4rd
-  :config
-  (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
+(after! md4rd
+  ;; (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
   (setq md4rd--oauth-access-token
         "236644830636-lQbAMvmd2Pf9xOXZaC_cuJ0vFwA")
   (setq md4rd--oauth-refresh-token
         "236644830636-ggej2y00GdK7vIvjoiYdzN9khj0")
-  (run-with-timer 0 3540 'md4rd-refresh-login)
   (setq md4rd-subs-active '(all 40klore Amd Australia compsci Documentaries gaming
                                 emacs GrimDank holochain homestead ImaginaryWarhammer
                                 lisp listentothis me_irl movies news nosurf nottheonion
                                 PoliticalHumor politics programming Redox rust science
-                                space technology unixporn worldnews futurology)))
-
-(use-package! org-roam
-  :after org
-  :hook
-  (after-init . org-roam-mode)
-  :custom
-  (org-roam-directory "~/org/"))
+                                space technology unixporn worldnews futurology))
+  (run-with-timer 0 3540 'md4rd-refresh-login))
 
 (solaire-global-mode 0)
 
