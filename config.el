@@ -31,14 +31,13 @@
     ;;(cfw:ical-create-source "gcal" "https://..../basic.ics" "IndianRed") ; google calendar ICS
     )))
 
-(display-time)
-(display-battery-mode)
-
 (use-package! which-key-posframe
   :config
   (which-key-posframe-mode)
   (setq which-key-posframe-parameters '((min-width . 180) (min-height . 30) (parent-frame . nil)))
   )
+
+(use-package! ytdl)
 
 (defun cc/make-real ()
   (interactive)
@@ -47,14 +46,18 @@
 (use-package! exwm
   ;; :hook doom-mark-buffer-as-real-h
   ;; :hook (exwm-mode . doom-mark-buffer-as-real-h)
+  ;; :hook ((hide-mode-line-mode doom-mark-buffer-as-real-h) . exwm-mode-hook)
   :config
   (use-package! exwm-randr
     :hook (exwm-randr-screen-change . (lambda ()
                                         (start-process-shell-command
-                                         "xrandr" nil "xrandr --output DP1 --mode 3840x2160 --above eDP1")))
+                                         "xrandr" nil "xrandr --output HDMI1 --mode 1920x1080 --above eDP1")))
     :config
     (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "DP1"))
     (exwm-randr-enable))
+
+  (use-package! exwm-systemtray
+    :config (exwm-systemtray-enable))
 
   (use-package! desktop-environment)
 
@@ -123,6 +126,8 @@
             (,(kbd "s-a") . org-agenda)
             ;; 's-`': previous buffer
             (,(kbd "s-`") . evil-switch-to-windows-last-buffer)
+            ;; 's-~': previous project
+            (,(kbd "s-~") . +workspace/other)
             ;; 's-m': maximize window
             (,(kbd "s-m") . doom/window-maximize-buffer)
             ;; 's-s': Split Vertically
@@ -189,6 +194,9 @@
     (setq exwm-input-simulation-keys
           '()))
 
+  ;; hooks
+  (add-hook! 'exwm-mode-hook #'(doom-mark-buffer-as-real-h hide-mode-line-mode))
+
   ;; Enable EXWM
   (exwm-enable)
   )
@@ -196,27 +204,27 @@
 ;; (load-file "~/.doom.d/hydras.el")
 ;; (setq hydra-hint-display-type 'posframe)
 ;; (after! ivy
-  ;; (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil)))
-  ;; )
+;;   (setq ivy-posframe-parameters '((min-width . 90) (min-height . 17) (parent-frame . nil)))
+;;   )
 
 ;; taken from sarg
 ;; fix posframes
-;; (defun cc/ivy-posframe-poshandler (info)
-;;   (let ((workarea (elt exwm-workspace--workareas exwm-workspace-current-index))
-;;         (return-value (posframe-poshandler-frame-center info)))
+(defun cc/ivy-posframe-poshandler (info)
+  (let ((workarea (elt exwm-workspace--workareas exwm-workspace-current-index))
+        (return-value (posframe-poshandler-frame-center info)))
 
-;;     (cons (+ (aref workarea 0) (car return-value))
-;;           (+ (aref workarea 1) (cdr return-value)))))
+    (cons (+ (aref workarea 0) (car return-value))
+          (+ (aref workarea 1) (cdr return-value)))))
 
-;; (defun cc/ivy-posframe-exwm (str)
-;;   (ivy-posframe--display str #'cc/ivy-posframe-poshandler))
+(defun cc/ivy-posframe-exwm (str)
+  (ivy-posframe--display str #'cc/ivy-posframe-poshandler))
 
-;; (after! ivy-posframe
-;;   (load! "window")
+(after! ivy-posframe
+  (load! "window")
 
-;;   (setq ivy-posframe-display-functions-alist '((t . cc/ivy-posframe-exwm))
-;;         ivy-posframe-parameters '((parent-frame nil)))
-;;   )
+  (setq ivy-posframe-display-functions-alist '((t . cc/ivy-posframe-exwm))
+        ivy-posframe-parameters '((parent-frame nil)))
+  )
 
 
 (after! objed
@@ -250,22 +258,22 @@
            "[?](W)"                     ; Task is being held up or paused
            "|"
            "[X](D)"))                   ; Task was completed
-        org-capture-templates
-        '(("j" "Journal" entry
-           (file+olp+datetree "journal.org" "Inbox")
-           "* %U %?\n%i" :prepend t)
-          ("i" "Inbox" entry
-           (file "inbox.org")
-           "* TODO %i%?\n%a\n")
-          ("T" "Tickler" entry
-           (file "tickler.org")
-           "* %i%?\n%U")
-          ("c" "Current Task Note" entry
-           (clock)
-           "* %i%?\n%a")
-          ("p" "Project todo" entry
-           (file+function "projects.org" projectile-project-name)
-           "* TODO %?\n %i\n %a"))
+        ;; org-capture-templates
+        ;; '(("j" "Journal" entry
+        ;;    (file+olp+datetree "journal.org" "Inbox")
+        ;;    "* %U %?\n%i" :prepend t)
+        ;;   ("i" "Inbox" entry
+        ;;    (file "inbox.org")
+        ;;    "* TODO %i%?\n%a\n")
+        ;;   ("T" "Tickler" entry
+        ;;    (file "tickler.org")
+        ;;    "* %i%?\n%U")
+        ;;   ("c" "Current Task Note" entry
+        ;;    (clock)
+        ;;    "* %i%?\n%a")
+        ;;   ("p" "Project todo" entry
+        ;;    (file+function "projects.org" projectile-project-name)
+        ;;    "* TODO %?\n %i\n %a"))
         org-refile-targets
         '(("inbox.org" :maxlevel . 2)
           ("projects.org" :maxlevel . 3)
@@ -274,20 +282,29 @@
         )
   )
 
-;; (use-package! doct
-;;   :after (org)
-;;   :config
-;;   (setq org-capture-templates
-;;         (doct '(("Journal" :keys "j"
-;;                  :file "journal.org"
-;;                  :template "* %U %?\n%i"
-;;                  :datetree t
-;;                  )
-;;                 ("Inbox" :keys "i"
-;;                  :file "inbox.org"
-;;                  :template "* TODO %i%?\n%a\n")))))
+(use-package! doct
+  :after (org)
+  :config
+  (setq org-capture-templates
+        (doct '(("Journal" :keys "j"
+                 :file "journal.org"
+                 :template "* %U %?\n%i"
+                 :datetree t)
+                ("Inbox" :keys "i"
+                 :file "inbox.org"
+                 :template "* TODO %i%?\n%a\n")
+                ("Gym" :keys "g"
+                 :file "projects.org"
+                 :id "80A8C875-E97F-4119-B79F-314831DBFFD2"
+                 :type table-line
+                 :template "|%t|%^{today's weight}|%^{squat}|%^{bench}|%^{pendlay row}|%^{deadlift}|%^{overhead press}|%^{turkish get-up}|%^{barbell shrug}|%^{notes}|")
+                ("Meditation" :keys "m"
+                 :file "projects.org"
+                 :id "8533A37F-FF97-432A-AC1E-6AAE4D011840"
+                 :type table-line
+                 :template "|%t|%^{time}|%i|")
+                ))))
 
-(setq browse-url-browser-function 'browse-url-firefox)
 (map! :n "SPC o m" 'mu4e
       :n "SPC o i" 'erc
       :n "SPC o s c" 'slack-channel-select
@@ -295,6 +312,8 @@
       :n "SPC o s u" 'slack-all-unreads)
 
 (map! :n "U" 'undo-tree-redo)
+
+(add-hook! pdf-view-mode :append :buffer #'pdf-view-midnight-minor-mode)
 
 (after! md4rd
   ;; (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
@@ -309,7 +328,7 @@
                                 space technology unixporn worldnews futurology))
   (run-with-timer 0 3540 'md4rd-refresh-login))
 
-(solaire-global-mode 0)
+;; (solaire-global-mode 0)
 
 (defun mu4e-message-maildir-matches (msg rx)
   (when rx
@@ -347,63 +366,27 @@
 		                  ( user-full-name	     . "Charles Cunningham" )
 		                  ( mu4e-compose-signature  . "- Charles Cunningham"))))))
 
-(use-package! slack
-  :init
-  (setq slack-buffer-emojify t          ; if you want emojis
-        slack-prefer-current-team t)
-  (set-popup-rule! "^\\*Slack" :ignore t)
-  :config
-  (slack-register-team
-   :name "jolocom"
-   :default t
-   :token "xoxs-3647896349-562530281909-1020866050723-e924ddc0ece43dc42171d75c1f8c9c0ce6187d1f020ee15d70447702e50627bf"
-   :subscribed-channels '(availability calendar design_n_content dev dev_business dev_identity
-                                       dev_integrations devdev dif eevents eljolocomworkshop
-                                       external_comm general hid hiringnew lunch osip-interop-poc
-                                       p2p papyri positioning_and_messaging privacyassessment
-                                       productownerteam socialmedia standup strategy team telekom
-                                       tellingstories urgent waldemarstr-37a website whitepaper))
+(slack-register-team
+ :name "jolocom"
+ :default t
+ :token "xoxs-3647896349-562530281909-1020866050723-e924ddc0ece43dc42171d75c1f8c9c0ce6187d1f020ee15d70447702e50627bf"
+ :subscribed-channels '(availability calendar design_n_content dev dev_business dev_identity
+                                     dev_integrations devdev dif eevents eljolocomworkshop
+                                     external_comm general hid hiringnew lunch osip-interop-poc
+                                     p2p papyri positioning_and_messaging privacyassessment
+                                     productownerteam socialmedia standup strategy team telekom
+                                     tellingstories urgent waldemarstr-37a website whitepaper))
 
-  (slack-register-team
-   :name "difdn"
-   :token "xoxs-165669436000-544672028195-1002487213604-c5a4989d942b796943791e6b893b1bf5fa0baf6fbd6ac86a42edffe9304ebc17"
-   :subscribed-channels '(general interop_project peer-did wg-auth wg-claims-credentials
-                                  wg-didcomm wg-id))
+(slack-register-team
+ :name "difdn"
+ :token "xoxs-165669436000-544672028195-1002487213604-c5a4989d942b796943791e6b893b1bf5fa0baf6fbd6ac86a42edffe9304ebc17"
+ :subscribed-channels '(general interop_project peer-did wg-auth wg-claims-credentials
+                                wg-didcomm wg-id))
 
-  (slack-register-team
-   :name "odysseyssiteam"
-   :token "xoxs-935348418500-937668157335-985592732129-2f2376cbfa3ebe40e14c5f2790af4099553ed70c168b0609ae2b97b1b690930e"
-   :subscribed-channels '(allgemein ssi-interop-odyssey))
-
-  (map! :map slack-info-mode-map
-        :localleader
-        :desc "update" "u" 'slack-room-update-messages)
-  (map! :map slack-mode-map
-        :localleader
-        :desc "kill" "c" 'slack-buffer-kill
-        (:prefix-map ("r" . "reactions")
-          :desc "add" "a" 'slack-message-add-reaction
-          :desc "remove" "r" 'slack-message-remove-reaction
-          :desc "list who" "l" 'slack-message-show-reaction-users)
-        (:prefix-map ("p" . "pinned")
-          :desc "list" "l" 'slack-room-pins-list
-          :desc "add" "a" 'slack-message-pins-add
-          :desc "remove" "r" 'slack-message-pins-remove)
-        (:prefix-map ("m" . "messages")
-          :desc "write" "m" 'slack-message-write-another-buffer
-          :desc "edit" "e" 'slack-message-edit
-          :desc "delete" "d" 'slack-mseeage-delete)
-        :desc "update" "u" 'slack-room-update-messages
-        :desc "mention user" "2" 'slack-message-embed-mention
-        :desc "mention channel" "3" 'slack-message-embed-channel)
-  (map! :map slack-edit-message-mode-map
-        :localleader
-        :desc "cancel" "c" 'slack-message-cancel-edit
-        :desc "send" "s" 'slack-message-send-from-buffer
-        :desc "mention user" "2" 'slack-message-embed-mention
-        :desc "mention channel" "3" 'slack-message-embed-channel)
-
-  (slack-start))
+(slack-register-team
+ :name "odysseyssiteam"
+ :token "xoxs-935348418500-937668157335-985592732129-2f2376cbfa3ebe40e14c5f2790af4099553ed70c168b0609ae2b97b1b690930e"
+ :subscribed-channels '(allgemein ssi-interop-odyssey))
 
 (use-package! sauron
   :config

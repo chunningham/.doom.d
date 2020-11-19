@@ -72,6 +72,7 @@ Can show completions at point for COMMAND using helm or ido"
 ;; (use-package! gpastel)
 ;; (use-package! exwm-mff)
 (use-package! xelb)
+
 (use-package! exwm
   :commands (exwm-enable exwm-init)
   ;; :hook (exwm-init . exwm-mff-mode)
@@ -94,8 +95,6 @@ Can show completions at point for COMMAND using helm or ido"
   (advice-add 'switch-to-buffer :around 'my-exwm-workspace-switch-to-buffer)
   (advice-add 'ivy--switch-buffer-action :around 'my-exwm-workspace-switch-to-buffer)
 
-  (exwm-input-set-key (kbd "M-y") #'my/exwm-counsel-yank-pop)
-
   (defun my/exwm-counsel-yank-pop ()
     "Same as `counsel-yank-pop' and paste into exwm buffer."
     (interactive)
@@ -111,18 +110,6 @@ Can show completions at point for COMMAND using helm or ido"
 
   ;; Disable dialog boxes since they are unusable in EXWM
   (setq use-dialog-box nil)
-  (setq exwm-workspace-number 5)
-  (defvar exwm-workspace-names
-    '("code" "brow" "extr" "slac" "lisp" ))
-
-  (defsubst exwm-workspace-name-to-index (name)
-    (-elem-index name exwm-workspace-names))
-
-  (setq exwm-workspace-index-map
-        (lambda (index)
-          (if (< index (length exwm-workspace-names))
-              (elt exwm-workspace-names index)
-            (number-to-string index))))
 
   ;; You may want Emacs to show you the time
   ;; (display-time-mode t)
@@ -175,13 +162,11 @@ Can show completions at point for COMMAND using helm or ido"
     (setq exwm-toggle-workspace exwm-workspace-current-index))
 
   ;; + Set shortcuts to switch to a certain workspace.
-  (dotimes (i exwm-workspace-number)
-    (exwm-input-set-key (kbd (format "s-%d" (1+ i)))
+  (dotimes (i 10)
+    (exwm-input-set-key (kbd (format "s-%d" i))
                         `(lambda ()
                            (interactive)
-                           (exwm-workspace-switch ,i))))
-
-
+                           (exwm-workspace-switch-create ,i))))
 
   (when (featurep! :app telega +ivy)
     (exwm-input-set-key (kbd "s-i") #'cc/sauron-show))
@@ -235,40 +220,11 @@ Can show completions at point for COMMAND using helm or ido"
                                                                (concat (format-time-string "%Y-%m-%d %T (%a w%W)"))
                                                                (battery-format "| %L: %p%% (%t)" (funcall battery-status-function)))))
 
-  (setq exwm-manage-configurations
-        `(((-any? (lambda (el) (equal exwm-class-name el))
-                  '("Peek" "mpv" "scrcpy"))
-           floating t
-           floating-mode-line nil)
-          ((equal exwm-class-name "Slack")
-           workspace ,(exwm-workspace-name-to-index "slac"))
-          ((equal exwm-instance-name "sun-awt-X11-XDialogPeer")
-           managed t
-           floating t)
-          ((equal exwm-class-name "jetbrains-idea")
-           workspace ,(exwm-workspace-name-to-index "code"))
-          ((equal exwm-class-name "qutebrowser")
-           workspace ,(exwm-workspace-name-to-index "brow"))
-          ((equal exwm-class-name "TelegramDesktop")
-           floating t
-           floating-mode-line nil
-           x 0.73
-           y 0.02
-           width 0.25
-           height 0.8)))
-
   ;; (exwm-input-set-simulation-keys nil)
 
   ;; Do not forget to enable EXWM. It will start by itself when things are ready.
-  ;; (exwm-enable)
+  (exwm-enable)
   )
-
-
-(defun cc/with-browser ()
-  "Opens browser side-by-side with current window"
-  (interactive)
-  (delete-other-windows)
-  (set-window-buffer (split-window-horizontally) "qutebrowser"))
 
 (use-package! exwm
   ;; :hook doom-mark-buffer-as-real-h
@@ -312,14 +268,12 @@ Can show completions at point for COMMAND using helm or ido"
     (interactive)
     (general-simulate-SPC-in-normal-state))
 
-  (setq lsp-keymap-prefix "s-<return>")
+  (setq lsp-keymap-prefix "s-M-C-<return>")
 
   ;; Global keybindings.
   (unless (get 'exwm-input-global-keys 'saved-value)
     (setq exwm-input-global-keys
           `(
-            ;; s-SPC: global leader key
-            (,(kbd "s-SPC") . my/press-leader-key)
             ;; 's-r': Reset (to line-mode).
             (,(kbd "s-r") . exwm-reset)
             ;; 's-w': Switch workspace.
@@ -415,5 +369,5 @@ Can show completions at point for COMMAND using helm or ido"
           '()))
 
   ;; Enable EXWM
-  (exwm-enable)
+  ;; (exwm-enable)
   )

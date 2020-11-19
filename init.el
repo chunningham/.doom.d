@@ -32,9 +32,9 @@
         +icons)
 
        :desktop
-       eaf
+       ;; eaf
        ;; exwm
-       guix
+       ;; guix
 
        :ui
        deft        ; notational velocity for Emacs
@@ -106,9 +106,10 @@
         +docsets)               ; ...or in Dash docsets locally
        (lsp +peek)
        ;;macos             ; MacOS-specific commands
-       magit                     ; a git porcelain for Emacs
+       (magit
+        +forge)                     ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
-       pass                             ; password manager for nerds
+       (pass +auth)                     ; password manager for nerds
        pdf                              ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb                ; creating color strings
@@ -176,6 +177,7 @@
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        web                              ; the tubes
+       yaml
 
        :email
        (mu4e +gmail)                    ; WIP
@@ -194,6 +196,8 @@
        ;; +wordnut         ; wordnet (wn) search
        ;; +langtool)       ; a proofreader (grammar/style check) for Emacs
        md4rd                            ; reddit client
+       ;; mosaic
+       ;; browser
 
        :collab
        ;;floobits          ; peer programming for a price

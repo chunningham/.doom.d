@@ -1,6 +1,7 @@
 ;;; desktop/eaf/config.el -*- lexical-binding: t; -*-
 
 (use-package! eaf
+  ;; :hook (eaf-mode . hide-mode-line-mode)
   :load-path "/usr/share/emacs/site-lisp/eaf"
   :config
   (evil-set-initial-state 'eaf-mode 'emacs)

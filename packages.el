@@ -20,6 +20,8 @@
 
 (package! sauron)
 
+(package! ytdl)
+
 ;; (package! lastfm)
 
 ;; (package! vuiet)
