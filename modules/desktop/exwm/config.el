@@ -20,8 +20,8 @@
               (list 0 default-output
                     1 (match-string 1)))))))
 
-(load! "+posframe")
-(load! "+volume")
+;; (load! "+posframe")
+;; (load! "+volume")
 
 (defun cc/exwm-app-launcher ()
   "Launches an application in your PATH.
@@ -76,7 +76,7 @@ Can show completions at point for COMMAND using helm or ido"
 (use-package! exwm
   :commands (exwm-enable exwm-init)
   ;; :hook (exwm-init . exwm-mff-mode)
-  :hook (exwm-mode . doom-mark-buffer-as-real-h)
+  ;; :hook (exwm-mode . doom-mark-buffer-as-real-h)
 
   :init
   (set-popup-rule! "^\\*EXWM\\*$" :ignore t)
@@ -90,7 +90,7 @@ Can show completions at point for COMMAND using helm or ido"
   ;;       focus-follows-mouse t)
 
   :config
-  (load! "+brightness")
+;;  (load! "+brightness")
 
   (advice-add 'switch-to-buffer :around 'my-exwm-workspace-switch-to-buffer)
   (advice-add 'ivy--switch-buffer-action :around 'my-exwm-workspace-switch-to-buffer)
@@ -117,7 +117,7 @@ Can show completions at point for COMMAND using helm or ido"
   ;; (setq-default display-time-format "%H:%M")
   ;; (setq display-time-default-load-average nil)
 
-  (add-to-list 'evil-emacs-state-modes 'exwm-mode)
+ ;;(add-to-list 'evil-emacs-state-modes 'exwm-mode)
   (add-hook 'exwm-mode-hook 'evil-emacs-state)
   (add-hook 'exwm-mode-hook 'hide-mode-line-mode)
 

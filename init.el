@@ -9,35 +9,30 @@
 ;; found in modules/README.org.
 
 ;; a hack to get the right path for mu4e
-(eval-when-compile
-  (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-  (require 'use-package))
-(use-package mu4e)
-
-(setq org-directory "~/org/")
 
 (doom! :input
        ;;chinese
        ;;japanese
 
        :completion
-       (company
-        +childframe)                    ; the ultimate code completion backend
+       ;; (company
+       ;;  +childframe)                    ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       (ivy                             ; a search engine for love and life
-        +fuzzy
-        +prescient
-        +childframe
-        +icons)
+       ;; (ivy                             ; a search engine for love and life
+       ;;  +fuzzy
+       ;;  +prescient
+       ;;  +childframe
+       ;;  +icons)
+       (vertico +icons)
 
        :desktop
        ;; eaf
-       ;; exwm
+       exwm
        ;; guix
 
        :ui
-       deft        ; notational velocity for Emacs
+       ;; deft        ; notational velocity for Emacs
        doom        ; what makes DOOM look the way it does
        ;; fill-column       ; a `fill-column' indicator
        hl-todo     ; highlight TODO/FIXME/NOTE tags
@@ -66,7 +61,7 @@
        fold                         ; (nigh) universal code folding
        (format +onsave)             ; automated prettiness
        lispy                        ; vim for lisp, for people who dont like vim
-       multiple-cursors             ; editing in many places at once
+       ;; multiple-cursors             ; editing in many places at once
        ;; objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
        rotate-text               ; cycle region at point between text candidates
@@ -107,7 +102,7 @@
        (lsp +peek)
        ;;macos             ; MacOS-specific commands
        (magit
-        +forge)                     ; a git porcelain for Emacs
+        +forge)                  ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        (pass +auth)                     ; password manager for nerds
        pdf                              ; pdf enhancements
@@ -116,6 +111,7 @@
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        upload                         ; map local to remote projects via ssh/ftp
+       tree-sitter
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -154,28 +150,31 @@
         ;; +jupyter        ; ipython/jupyter support for babel
         ;; +pandoc          ; export-with-pandoc support
         ;; +brain           ; one is better than none
+        +pretty
         +pomodoro                       ; be fruitful with the tomato technique
         +present
-        +roam)       ; using org-mode for presentations
+        +roam2)       ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
-       qt                ; the 'cutest' gui framework ever
+       ;; python            ; beautiful is better than ugly
+       ;; qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        rest              ; Emacs as a REST client
-       (ruby             ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-        +lsp
-        +rvm
-        +rbenv)
+       ;; (ruby             ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       ;;  +lsp
+       ;;  +rvm
+       ;;  +rbenv)
        (rust +lsp)          ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       scheme ; a fully conniving family of lisps
+       (scheme
+        +guile
+        +mit) ; a fully conniving family of lisps
        sh     ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
-       ;;terra             ; Earth and Moon in alignment for performance.
+       terra             ; Earth and Moon in alignment for performance.
        web                              ; the tubes
        yaml
 
@@ -195,7 +194,7 @@
        ;;(write            ; emacs as a word processor (latex + org + markdown)
        ;; +wordnut         ; wordnet (wn) search
        ;; +langtool)       ; a proofreader (grammar/style check) for Emacs
-       md4rd                            ; reddit client
+       ;; md4rd                            ; reddit client
        ;; mosaic
        ;; browser
 

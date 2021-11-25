@@ -18,8 +18,8 @@
 (package! dmenu)
 
 ;; frame control
-(package! frame-purpose)
-(package! frame-workflow (:recipe (:host github :repo "akirak/frame-workflow")))
+;; (package! frame-purpose)
+;; (package! frame-workflow (:recipe (:host github :repo "akirak/frame-workflow")))
 
 ;; mouse finder
 ;; (package! exwm-mff :recipe (:host github :repo "ieure/exwm-mff"))

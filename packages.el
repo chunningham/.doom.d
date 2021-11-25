@@ -10,17 +10,26 @@
 
 (package! desktop-environment)
 
-(package! which-key-posframe)
+;; (package! which-key-posframe)
 
 (package! gpastel)
 
 (package! doct)
 
-(package! slack)
-
 (package! sauron)
 
 (package! ytdl)
+
+(package! mini-frame)
+
+(unpin! magit forge)
+
+(package! combobulate :recipe (:host github :repo "chunningham/combobulate" :branch "feat/rust"))
+(package! tree-sitter-langs)
+
+(package! gitconfig-mode :recipe (:host github :repo "magit/git-modes" :files ("gitconfig-mode.el")))
+(package! gitignore-mode :recipe (:host github :repo "magit/git-modes" :files ("gitignore-mode.el")))
+
 
 ;; (package! lastfm)
 
