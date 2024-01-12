@@ -2,22 +2,17 @@
 
 ;; Place your private configuration here
 
-;; This emacs was installed via:
-;; brew tap daviderestivo/emacs-head
-;; brew install emacs-head --HEAD --with-cocoa --with-dbus --with-imagemagick
-;; --with-jansson --with-mailutils --with-pdumper
-
-(setq doom-theme 'doom-manegarm)
+(setq doom-theme 'doom-manegarm-2)
 
 (setq user-full-name "Charles Cunningham"
       user-mail-address "c.a.cunningham6@gmail.com")
 
 (setq deft-directory org-directory)
 
-(after! calender
-  (setq org-gcal-client-id "509352370358-o1j21kpjvjjs15iek9p7ocnv63f24oqc.apps.googleusercontent.com"
-        org-gcal-client-secret "Olqey39CAUc_Pc_xy_Og89W0"
-        org-gcal-file-alist '(("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
+;; (after! calender
+;;   (setq org-gcal-client-id "509352370358-o1j21kpjvjjs15iek9p7ocnv63f24oqc.apps.googleusercontent.com"
+;;         org-gcal-client-secret "Olqey39CAUc_Pc_xy_Og89W0"
+;;         org-gcal-file-alist '(("hildebrand.me_ol6c9vukg2dlh3vm4u58vhjp94@group.calendar.google.com" . "~/org/schedule.org"))))
 
 (defun my-open-calender ()
   (interactive)
@@ -37,11 +32,36 @@
 ;;   (setq which-key-posframe-parameters '((min-width . 180) (min-height . 30) (parent-frame . nil)))
 ;;   )
 
+(map! "s-f" 'find-file
+      "s-b" '+vertico/switch-workspace-buffer
+      "s-B" 'consult-buffer
+      "s-q" 'kill-buffer-and-window
+      "s-x" '+workspace/close-window-or-workspace
+      "s-X" 'kill-current-buffer
+      "s-a" 'org-agenda
+      "s-`" 'evil-switch-to-windows-last-buffer
+      "s-m" 'doom/window-maximize-buffer
+      "s-s" 'evil-window-vsplit
+      "s-S" 'evil-window-split
+      "s-u" 'winner-undo
+      "s-t" '+vterm/toggle
+      "s-T" '+vterm/here
+      "s-h" 'evil-window-left
+      "s-j" 'evil-window-down
+      "s-k" 'evil-window-up
+      "s-l" 'evil-window-right
+      "s-H" '+evil/window-move-left
+      "s-J" '+evil/window-move-down
+      "s-K" '+evil/window-move-up
+      "s-L" '+evil/window-move-right)
+
+(setq mac-pass-command-to-system nil)
+
 (use-package! ytdl)
 
-(defun cc/make-real ()
-  (interactive)
-  (doom-mark-buffer-as-real-h))
+;; (defun cc/make-real ()
+;;   (interactive)
+;;   (doom-mark-buffer-as-real-h))
 
 ;; (load-file "~/.doom.d/hydras.el")
 ;; (setq hydra-hint-display-type 'posframe)
@@ -63,6 +83,19 @@
   (setq-default cursor-type 'bar)
   )
 
+(after! org-roam
+  (setq org-roam-capture-templates '((
+                                      "d" "default" plain "%?" :target
+                                      (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+                                      :unnarrowed t
+                                      )
+                                     (
+                                      "m" "module" plain (file "~/.config/doom/module_template.org") :target
+                                      (file+head "modules/${slug}.org" "#+title: ${title}\n")
+                                      :unnarrowed t
+                                      )
+                                     )))
+
 (after! org
   (setq org-todo-keywords
         '((sequence
@@ -78,7 +111,7 @@
            "[-](S)"                     ; Task is in progress
            "[?](W)"                     ; Task is being held up or paused
            "|"
-           "[X](D)"))                   ; Task was completed
+           "[X](D)"))            ; Task was completed
         ;; org-capture-templates
         ;; '(("j" "Journal" entry
         ;;    (file+olp+datetree "journal.org" "Inbox")
@@ -126,6 +159,12 @@
                  :template "|%t|%^{time}|%i|")
                 ))))
 
+(use-package! org-modern
+  :after (org)
+  :config
+  (add-hook! org-mode :append :buffer #'org-modern-mode)
+  (add-hook! 'org-agenda-finalize-hook :append :buffer #'org-modern-agenda))
+
 ;; (map! :n "SPC o m" 'mu4e
 ;;       :n "SPC o i" 'erc
 ;;       :n "SPC o s c" 'slack-channel-select
@@ -151,41 +190,99 @@
 
 ;; (solaire-global-mode 0)
 
-(defun mu4e-message-maildir-matches (msg rx)
-  (when rx
-    (if (listp rx)
-        ;; if rx is a list, try each one for a match
-        (or (mu4e-message-maildir-matches msg (car rx))
-            (mu4e-message-maildir-matches msg (cdr rx)))
-      ;; not a list, check rx
-      (string-match rx (mu4e-message-field msg :maildir)))))
+(after! lsp-rust
+  (require 'dap-cpptools))
 
+(setq dap-cpptools-extension-version "1.12.1")
+
+(after! dap-cpptools
+  ;; Add a template specific for debugging Rust programs.
+  ;; It is used for new projects, where I can M-x dap-edit-debug-template
+  (dap-register-debug-template "Rust::CppTools Run Configuration"
+                               (list :type "cppdbg"
+                                     :request "launch"
+                                     :name "Rust::Run"
+                                     :MIMode "gdb"
+                                     :miDebuggerPath "rust-gdb"
+                                     :MIDebuggerPath "rust-gdb"
+                                     :environment []
+                                     :program "${workspaceFolder}/target/debug/hello / replace with binary"
+                                     :cwd "${workspaceFolder}"
+                                     :console "external"
+                                     :dap-compilation "cargo build"
+                                     :dap-compilation-dir "${workspaceFolder}")))
 
 (after! mu4e
-  (setq mu4e-contexts
-        `( ,(make-mu4e-context
-	           :name "Private"
-	           :enter-func (lambda () (mu4e-message "Entering Private context"))
-             :leave-func (lambda () (mu4e-message "Leaving Private context"))
-	           ;; we match based on the contact-fields of the message
-	           :match-func (lambda (msg)
-			                     (when msg
-			                       (mu4e-message-maildir-matches msg "^/gmail")))
-	           :vars '( ( user-mail-address	    . "c.a.cunnignham6@gmail.com"  )
-		                  ( user-full-name	    . "Charles Cunningham" )
-		                  ( mu4e-compose-signature . "- Charles")))
-           ,(make-mu4e-context
-	           :name "Work"
-	           :enter-func (lambda () (mu4e-message "Switch to the Work context"))
-	           ;; no leave-func
-	           ;; we match based on the maildir of the message
-	           ;; this matches maildir /Arkham and its sub-directories
-	           :match-func (lambda (msg)
-			                     (when msg
-			                       (mu4e-message-maildir-matches msg "^/work")))
-	           :vars '( ( user-mail-address	     . "charles@jolocom.io" )
-		                  ( user-full-name	     . "Charles Cunningham" )
-		                  ( mu4e-compose-signature  . "- Charles Cunningham"))))))
+  (setq sendmail-program (executable-find "msmtp")
+        send-mail-function #'smtpmail-send-it
+        message-sendmail-f-is-evil t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function #'message-send-mail-with-sendmail)
+  
+  (set-email-account! "spruceid"
+                      '((smtpmail-smtp-user     . "charles.cunningham@spruceid.com")
+                        (user-mail-address      . "charles.cunningham@spruceid.com")
+                        (mu4e-sent-folder       . "/spruceid/Send Mail")
+                        (mu4e-drafts-folder     . "/spruceid/Drafts")
+                        (mu4e-trash-folder      . "/spruceid/Trash")
+                        (mu4e-refile-folder     . "/spruceid/All Mail"))
+                      )
+
+  (set-email-account! "gmail"
+                      '((smtpmail-smtp-user     . "c.a.cunningham6@gmail.com")
+                        (user-mail-address      . "c.a.cunningham6@gmail.com")
+                        (mu4e-sent-folder       . "/gmail/Send Mail")
+                        (mu4e-drafts-folder     . "/gmail/Drafts")
+                        (mu4e-trash-folder      . "/gmail/Trash")
+                        (mu4e-refile-folder     . "/gmail/All Mail"))
+                      )
+
+  (setq +mu4e-gmail-accounts '(("charles.cunningham@spruceid.com" . "/spruceid")
+                               ("c.a.cunningham6@gmail.com" . "/gmail"))))
+
+(after! latex
+  (setq +latex-viewers '(pdf-tools)))
+
+(after! biblio
+  (setq! citar-bibliography '("~/bib/references.bib")
+         citar-library-paths '("~/bib/lib/")
+         citar-notes-paths '("~/bib/notes/")))
+
+;; chatgpt jarvis
+;; (write-region "" nil "/tmp/jarvis-chatgpt.txt")
+
+;; (require 'filenotify)
+
+;; (generate-new-buffer "CHATGPT")
+
+;; (defun my-jarvis-callback (event)
+;;   (with-current-buffer "CHATGPT"
+;;     (erase-buffer)
+;;     (insert-file-contents "/tmp/jarvis-chatgpt.txt" nil 0 5000)
+;;     (goto-char (point-max))))
+
+;; (file-notify-add-watch
+;;   "/tmp/jarvis-chatgpt.txt" '(change) 'my-jarvis-callback)
+
+;; (defun send-selection-to-jarvis ()
+;;   (interactive)
+;;   (if (use-region-p)
+;;       (write-region (region-beginning) (region-end) "/tmp/jarvis-chatgpt-input.txt" 0)))
+
+;; (map! :nv "SPC a a" 'send-selection-to-jarvis)
+
+(use-package! kele
+  :config
+  (kele-mode 1))
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         ("C-<tab>" . 'copilot-accept-completion-by-word)
+         :map copilot-completion-map
+         ("<tab>" . 'copilot-accept-completion)
+         ("TAB" . 'copilot-accept-completion)))
+
 ;; (use-package! sauron
 ;;   :config
 ;;   (setq sauron-separate-frame nil
@@ -203,14 +300,16 @@
 
 ;;   (sauron-start-hidden))
 
-(use-package! mini-frame
-  :config
-  (add-hook 'after-init-hook 'mini-frame-mode)
-  (setq mini-frame-standalone t)
-  (setq mini-frame-completions-show-parameters '((height . 0.25) (width . 1.0) (left . 0.5) (top . 0.25)))
-  )
+;; (use-package! mermaid-mode)
 
-(use-package! combobulate
-  :hook ((rustic-mode . combobulate-mode)
-         (js-mode . combobulate-mode)
-         (typescript-mode . combobulate-mode)))
+;; (use-package! mini-frame
+;;   :config
+;;   (add-hook 'after-init-hook 'mini-frame-mode)
+;;   (setq mini-frame-standalone t)
+;;   (setq mini-frame-completions-show-parameters '((height . 0.25) (width . 1.0) (left . 0.5) (top . 0.25)))
+;;   )
+
+;; (use-package! combobulate
+;;   :hook ((rustic-mode . combobulate-mode)
+;;          (js-mode . combobulate-mode)
+;;          (typescript-mode . combobulate-mode)))

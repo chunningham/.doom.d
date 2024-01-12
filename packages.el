@@ -6,11 +6,9 @@
 ;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
-(package! exwm)
-
-(package! desktop-environment)
-
 ;; (package! which-key-posframe)
+
+(package! org-modern)
 
 (package! gpastel)
 
@@ -20,16 +18,16 @@
 
 (package! ytdl)
 
-(package! mini-frame)
+;; (package! mini-frame)
 
-(unpin! magit forge)
-
-(package! combobulate :recipe (:host github :repo "chunningham/combobulate" :branch "feat/rust"))
 (package! tree-sitter-langs)
 
-(package! gitconfig-mode :recipe (:host github :repo "magit/git-modes" :files ("gitconfig-mode.el")))
-(package! gitignore-mode :recipe (:host github :repo "magit/git-modes" :files ("gitignore-mode.el")))
+(package! biblio)
 
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")));; (package! mermaid-mode)
+
+(package! kele)
 
 ;; (package! lastfm)
 
