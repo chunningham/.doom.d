@@ -29,6 +29,8 @@
 
 (package! kele)
 
+(package! aidermacs)
+
 ;; (package! lastfm)
 
 ;; (package! vuiet)

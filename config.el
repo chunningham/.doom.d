@@ -249,6 +249,15 @@
          ("<tab>" . 'copilot-accept-completion)
          ("TAB" . 'copilot-accept-completion)))
 
+
+(use-package! aidermacs
+  :bind (("C-c a" . aidermacs-transient-menu))
+  :config
+  :custom
+  (aidermacs-use-architect-mode t)
+  (aidermacs-backend 'vterm)
+  (aidermacs-architect-model "o1-mini"))
+
 ;; (use-package! sauron
 ;;   :config
 ;;   (setq sauron-separate-frame nil
