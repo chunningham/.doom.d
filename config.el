@@ -72,17 +72,6 @@
 ;; taken from sarg
 ;; fix posframes
 
-(after! objed
-  ;; create leader key
-  (define-key objed-map (kbd "SPC") 'hydra-hail/body)
-  (define-key objed-map (kbd "M-x") 'counsel-M-x)
-
-  ;; set S-SPC to toggle objed mode
-  (define-key objed-map (kbd "S-SPC") 'objed-quit)
-  (define-key global-map (kbd "S-SPC") 'objed-activate)
-  (setq-default cursor-type 'bar)
-  )
-
 (after! org-roam
   (setq org-roam-capture-templates '((
                                       "d" "default" plain "%?" :target
@@ -220,8 +209,8 @@
         message-send-mail-function #'message-send-mail-with-sendmail)
   
   (set-email-account! "spruceid"
-                      '((smtpmail-smtp-user     . "charles.cunningham@spruceid.com")
-                        (user-mail-address      . "charles.cunningham@spruceid.com")
+                      '((smtpmail-smtp-user     . "charles@tinycloud.xyz")
+                        (user-mail-address      . "charles@tinycloud.xyz")
                         (mu4e-sent-folder       . "/spruceid/Send Mail")
                         (mu4e-drafts-folder     . "/spruceid/Drafts")
                         (mu4e-trash-folder      . "/spruceid/Trash")
@@ -237,7 +226,7 @@
                         (mu4e-refile-folder     . "/gmail/All Mail"))
                       )
 
-  (setq +mu4e-gmail-accounts '(("charles.cunningham@spruceid.com" . "/spruceid")
+  (setq +mu4e-gmail-accounts '(("charles@tinycloud.xyz" . "/tinycloud")
                                ("c.a.cunningham6@gmail.com" . "/gmail"))))
 
 (after! latex
@@ -247,29 +236,6 @@
   (setq! citar-bibliography '("~/bib/references.bib")
          citar-library-paths '("~/bib/lib/")
          citar-notes-paths '("~/bib/notes/")))
-
-;; chatgpt jarvis
-;; (write-region "" nil "/tmp/jarvis-chatgpt.txt")
-
-;; (require 'filenotify)
-
-;; (generate-new-buffer "CHATGPT")
-
-;; (defun my-jarvis-callback (event)
-;;   (with-current-buffer "CHATGPT"
-;;     (erase-buffer)
-;;     (insert-file-contents "/tmp/jarvis-chatgpt.txt" nil 0 5000)
-;;     (goto-char (point-max))))
-
-;; (file-notify-add-watch
-;;   "/tmp/jarvis-chatgpt.txt" '(change) 'my-jarvis-callback)
-
-;; (defun send-selection-to-jarvis ()
-;;   (interactive)
-;;   (if (use-region-p)
-;;       (write-region (region-beginning) (region-end) "/tmp/jarvis-chatgpt-input.txt" 0)))
-
-;; (map! :nv "SPC a a" 'send-selection-to-jarvis)
 
 (use-package! kele
   :config
