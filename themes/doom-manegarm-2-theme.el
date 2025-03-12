@@ -188,7 +188,7 @@ real file buffers will now be brighter instead."
    (magit-branch-local :foreground yellow)
    (magit-diff-file-heading :weight 'regular)
    (magit-header-line :background nil :foreground blue :weight 'bold)
-   (magit-diff-added-highlight :background (doom-darken green 0.5) :foreground black)
+   (magit-diff-added-highlight :background (doom-darken green 0.5) :foreground "black")
    ;;;; markdown-mode
    (markdown-markup-face :foreground base5)
    (markdown-header-face :inherit 'bold :foreground red)

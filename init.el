@@ -15,8 +15,8 @@
        ;;japanese
 
        :completion
-       ;; (company
-       ;;  +childframe)                    ; the ultimate code completion backend
+       (company
+        +childframe)                    ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;; (ivy                             ; a search engine for love and life
@@ -31,6 +31,9 @@
        ;; exwm
        ;; guix
 
+       :os
+       macos
+
        :ui
        ;; deft        ; notational velocity for Emacs
        doom        ; what makes DOOM look the way it does
@@ -44,8 +47,8 @@
        ophints ; highlight the region an operation acts on
        (popup  ; tame sudden yet inevitable temporary windows
         ;; +all             ; catch all popups that start with an asterix
-        +defaults)                      ; default popup rules
-       ligatures       ; replace bits of code with pretty symbols
+        +defaults)                    ; default popup rules
+       ligatures                      ; replace bits of code with pretty symbols
        ;; tabs              ; FIXME an (incomplete) tab bar for Emacs
        treemacs                      ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
@@ -108,7 +111,7 @@
        pdf                              ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb                ; creating color strings
-       terraform         ; infrastructure as code
+       terraform          ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        upload                         ; map local to remote projects via ssh/ftp
        tree-sitter
@@ -175,7 +178,7 @@
        ;;  +mit)
                                         ; a fully conniving family of lisps
        sh                   ; she sells {ba,z,fi}sh shells on the C xor
-       solidity          ; do you need a blockchain? No.
+       solidity             ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        terra                      ; Earth and Moon in alignment for performance.
        (web +lsp +tree-sitter)    ; the tubes
