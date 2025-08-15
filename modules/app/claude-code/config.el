@@ -1,8 +1,7 @@
 ;;; app/claude-code/config.el -*- lexical-binding: t; -*-
 
 (use-package! claude-code-ide
-  :defer t
-  :init
+  :config
   ;; Set up keybindings under the AI prefix
   (map! :leader
         (:prefix ("-" . "AI/Claude")
@@ -13,11 +12,10 @@
          :desc "Send region to Claude"      "R" #'claude-code-ide-send-region
          :desc "Send buffer to Claude"      "b" #'claude-code-ide-send-buffer
          :desc "Send project info"          "p" #'claude-code-ide-send-project))
-  
+
   ;; Global keybinding for quick access
   (map! :g "C-c '" #'claude-code-ide-menu)
-  
-  :config
+
   ;; Enable MCP tools for bidirectional communication
   (claude-code-ide-emacs-tools-setup)
   
@@ -27,8 +25,11 @@
   ;; Set buffer naming convention
   (setq claude-code-ide-buffer-name-function
         (lambda (project-root)
-          (format "*Claude Code: %s*" (projectile-project-name))))
-  
+          (format "*Claude Code: %s*" (doom-project-name))))
+
+  (unless (modulep! +vterm)
+    (setq claude-code-ide-terminal-backend 'eat))
+
   ;; Optional: Add custom CLI flags
   ;; (setq claude-code-ide-extra-flags '("--max-tokens" "4096"))
   

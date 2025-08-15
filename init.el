@@ -197,7 +197,7 @@
        ;;calendar
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
-       claude-code
+       (claude-code +vterm)
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
 
