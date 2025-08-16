@@ -2,9 +2,10 @@
 ;;; app/eaf/packages.el
 
 (package! eaf
+  :disable t
   :recipe (:host github
            :repo "emacs-eaf/emacs-application-framework"
-           :files ("*.el" "*.py" "core" "app" "*.json")
+           :files ("*.el" "*.eln" "*.py" "*.json" "core" "extension" "reinput" "app")
            :includes (eaf-file-manager ; Straight won't try to search for these packages when we make further use-package invocations for them
                       eaf-music-player
                       eaf-image-viewer
@@ -17,7 +18,6 @@
                       eaf-file-sender
                       eaf-pdf-viewer
                       eaf-mindmap
-                      eaf-netease-cloud-music
                       eaf-jupyter
                       eaf-org-previewer
                       eaf-system-monitor
@@ -29,5 +29,10 @@
                       eaf-git
                       eaf-evil
                       eaf-markmap
+                      eaf-demo
+                      eaf-vue-demo
+                      eaf-vue-tailwindcss
                       eaf-all-the-icons)
            :pre-build (("python" "install-eaf.py" "--install-all-apps"))))
+
+(package! all-the-icons :pin "4778632b29c8c8d2b7cd9ce69535d0be01d846f9")
