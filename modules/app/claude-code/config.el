@@ -1,9 +1,9 @@
 ;;; app/claude-code/config.el -*- lexical-binding: t; -*-
 
 (use-package! claude-code-ide
-  :config
-  ;; Set up keybindings under the AI prefix
+  :bind
   (map! :leader
+        ;; Set up keybindings under the AI prefix
         (:prefix ("-" . "AI/Claude")
          :desc "Claude Code menu"           "c" #'claude-code-ide-menu
          :desc "Start Claude Code"          "s" #'claude-code-ide
@@ -11,11 +11,10 @@
          :desc "Stop Claude Code"           "q" #'claude-code-ide-stop
          :desc "Send region to Claude"      "R" #'claude-code-ide-send-region
          :desc "Send buffer to Claude"      "b" #'claude-code-ide-send-buffer
-         :desc "Send project info"          "p" #'claude-code-ide-send-project))
-
-  ;; Global keybinding for quick access
-  (map! :g "C-c '" #'claude-code-ide-menu)
-
+         :desc "Send project info"          "p" #'claude-code-ide-send-project)
+        ;; Global keybinding for quick access
+        :g "C-c '" #'claude-code-ide-menu)
+  :config
   ;; Enable MCP tools for bidirectional communication
   (claude-code-ide-emacs-tools-setup)
   
