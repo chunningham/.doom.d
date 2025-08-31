@@ -101,4 +101,7 @@
       "s-H" '+evil/window-move-left
       "s-J" '+evil/window-move-down
       "s-K" '+evil/window-move-up
-      "s-L" '+evil/window-move-right)
+      "s-L" '+evil/window-move-right
+      :n "U" 'undo-tree-redo)
+
+(add-hook! pdf-view-mode :append :buffer #'pdf-view-midnight-minor-mode)
