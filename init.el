@@ -114,6 +114,7 @@
         +docsets
         +offline)
        llm               ; when I said you needed friends, I didn't mean...
+       copilot
        (lsp +peek)       ; M-x vscode
        (magit +forge)     ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
