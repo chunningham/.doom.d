@@ -227,6 +227,7 @@
        (claude-code +vterm)
        aidermacs
        ytdl
+       eaf
        ;; browser
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
