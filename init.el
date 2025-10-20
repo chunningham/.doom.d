@@ -229,6 +229,7 @@
        aidermacs
        ytdl
        eaf
+       (agent-shell +sidebar)
        ;; browser
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
