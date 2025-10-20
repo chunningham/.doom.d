@@ -1,14 +1,54 @@
 ;;; app/eaf/config.el -*- lexical-binding: t; -*-
 
 (use-package! eaf
-  :custom
-  (eaf-browser-continue-where-left-off t)
-  (eaf-browser-enable-adblocker t)
-  (browse-url-browser-function 'eaf-open-browser) ;; Make EAF Browser my default browser
   :config
+  (use-package! eaf-file-manager)
+  (use-package! eaf-music-player)
+  (use-package! eaf-image-viewer)
+  (use-package! eaf-camera)
+  (use-package! eaf-airshare)
+  (use-package! eaf-terminal)
+  (use-package! eaf-markdown-previewer)
+  (use-package! eaf-video-player)
+  (use-package! eaf-js-video-player)
+  (use-package! eaf-file-sender)
+  (use-package! eaf-pdf-viewer)
+  (use-package! eaf-mindmap)
+  (use-package! eaf-jupyter)
+  (use-package! eaf-org-previewer)
+  (use-package! eaf-system-monitor)
+  (use-package! eaf-rss-reader)
+  (use-package! eaf-file-browser)
+  (use-package! eaf-browser)
+  (use-package! eaf-org)
+  (use-package! eaf-mail)
+  (use-package! eaf-git)
+  (use-package! eaf-evil)
+  (use-package! eaf-markmap)
+  (use-package! eaf-demo)
+  (use-package! eaf-vue-demo)
+  (use-package! eaf-vue-tailwindcss)
+  (use-package! eaf-all-the-icons)
+  
   (evil-set-initial-state 'eaf-mode 'emacs)
-  (setq browse-url-browser-function 'eaf-open-browser)
   (defalias 'browse-web #'eaf-open-browser)
+
   (map! :desc "browse" :n "SPC o B" 'eaf-open-browser-with-history)
+  (define-key key-translation-map (kbd "SPC")
+              (lambda (prompt)
+                (if (derived-mode-p 'eaf-mode)
+                    (pcase eaf--buffer-app-name
+                      ("browser" (if  eaf-buffer-input-focus
+                                     (kbd "SPC")
+                                   (kbd eaf-evil-leader-key)))
+                      ("pdf-viewer" (kbd eaf-evil-leader-key))
+                      ("image-viewer" (kbd eaf-evil-leader-key))
+                      (_  (kbd "SPC")))
+                  (kbd "SPC"))))
+
+  (setq browse-url-browser-function 'eaf-open-browser)
   (setq eaf-browser-default-search-engine "duckduckgo")
-  (setq eaf-browse-blank-page-url "https://duckduckgo.com"))
+  (setq eaf-browse-blank-page-url "https://duckduckgo.com")
+  (setq eaf-browser-dark-mode "force")
+  (setq eaf-browser-enable-adblocker t)
+  (setq eaf-browser-continue-where-left-off t))
