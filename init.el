@@ -105,7 +105,7 @@
        ;;collab            ; buffers with friends
        debugger          ; FIXME stepping through code, to help you add bugs
        direnv
-       (docker +lsp)
+       (docker +lsp +tree-sitter)
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
@@ -126,6 +126,7 @@
 
        :os
        (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
+       (:if (featurep :system 'linux) exwm)
        ;;tty               ; improve the terminal Emacs experience
 
        :lang
@@ -219,6 +220,7 @@
        (claude-code +vterm)
        aidermacs
        ytdl
+       ;; browser
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
 
