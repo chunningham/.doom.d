@@ -48,7 +48,8 @@
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       smooth-scroll     ; So smooth you won't believe it's not butter
+       (smooth-scroll    ; So smooth you won't believe it's not butter
+        +interpolate)
        ;;tabs              ; a tab bar for Emacs
        treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
@@ -198,7 +199,9 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       (web +lsp +tree-sitter) ; the tubes
+       (web                ; the tubes
+        +lsp
+        +tree-sitter)
        (yaml              ; JSON, but readable
         +lsp
         +tree-sitter)
