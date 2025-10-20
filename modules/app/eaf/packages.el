@@ -1,6 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; app/eaf/packages.el
-;;;
+
 (package! eaf
   :recipe (:host github
            :repo "emacs-eaf/emacs-application-framework"
@@ -28,5 +28,6 @@
                       eaf-mail
                       eaf-git
                       eaf-evil
-                      eaf-markmap)
+                      eaf-markmap
+                      eaf-all-the-icons)
            :pre-build (("python" "install-eaf.py" "--install-all-apps"))))
