@@ -228,7 +228,34 @@
        (claude-code +vterm)
        aidermacs
        ytdl
-       eaf
+       (eaf
+        +file-manager
+        +music-player
+        +image-viewer
+        +camera
+        +airshare
+        +terminal
+        +markdown-previewer
+        +video-player
+        +js-video-player
+        +file-sender
+        +pdf-viewer
+        +mindmap
+        +jupyter
+        +org-previewer
+        +system-monitor
+        +rss-reader
+        +file-browser
+        +browser
+        +org
+        +mail
+        +git
+        +evil
+        +markmap
+        +demo
+        +vue-demo
+        +vue-tailwindcss
+        +all-the-icons)
        (agent-shell +sidebar)
        ;; browser
        ;;irc               ; how neckbeards socialize
